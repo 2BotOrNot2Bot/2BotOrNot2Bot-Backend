@@ -13,7 +13,6 @@ public enum BusinessError {
     ACCESS_NOT_GRANTED("002","access not granted, please contact administrator"),
     UNKNOWN_USER("003","didn't find the user"),
     DUPLICATE_USER("004","the user email already exists"),
-    LOGIN_FAILED("005","please provide the correct email and password"),
     UNKNOWN_ERROR("999","please take a screenshot of the error and send it to yibowen@usc.edu");
 
     private final String code;

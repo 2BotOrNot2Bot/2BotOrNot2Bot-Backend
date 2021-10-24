@@ -17,6 +17,8 @@ public class User {
 
     private String password;
 
+    private Integer points;
+
     private Integer role;
 
 }

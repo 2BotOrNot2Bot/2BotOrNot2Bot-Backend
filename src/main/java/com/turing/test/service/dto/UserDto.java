@@ -13,6 +13,8 @@ public class UserDto {
 
     private String email;
 
+    private String points;
+
     private Integer role;
 
 }

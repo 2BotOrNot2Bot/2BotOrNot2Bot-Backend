@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //add user to firestore
+        user.setPoints(0); //initial points is 0
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(user.getEmail()).set(user);
         log.info("UserServiceImpl->addUser: new user {} added", user.getEmail());
         return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
