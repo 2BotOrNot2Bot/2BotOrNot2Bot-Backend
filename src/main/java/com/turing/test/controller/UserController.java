@@ -18,12 +18,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/getPatientDetails")
+    @GetMapping("/users")
     public UserDto getPatient(@RequestParam String email) throws InterruptedException, ExecutionException{
         return userService.findUser(email);
     }
 
-    @PostMapping("/createPatient")
+    @PostMapping("/users")
     public String createPatient(@RequestBody User user) throws InterruptedException, ExecutionException {
         return userService.addUser(user);
     }
