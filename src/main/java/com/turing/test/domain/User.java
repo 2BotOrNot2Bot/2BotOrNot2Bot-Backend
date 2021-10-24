@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    private Long id;
+    private Long uid;
 
     private String email;
 

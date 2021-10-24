@@ -3,6 +3,7 @@ package com.turing.test.controller;
 import com.turing.test.domain.User;
 import com.turing.test.service.UserService;
 import com.turing.test.service.dto.UserDto;
+import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,12 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    public UserDto getPatient(@RequestParam String email) throws InterruptedException, ExecutionException{
+    public ResultVo<UserDto> getPatient(@RequestParam String email) throws InterruptedException, ExecutionException{
         return userService.findUser(email);
     }
 
     @PostMapping("/users")
-    public String createPatient(@RequestBody User user) throws InterruptedException, ExecutionException {
+    public ResultVo<String> createPatient(@RequestBody User user) throws InterruptedException, ExecutionException {
         return userService.addUser(user);
     }
 

@@ -1,7 +1,6 @@
 package com.turing.test.service.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -10,14 +9,12 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.turing.test.domain.User;
 import com.turing.test.service.UserService;
 import com.turing.test.service.dto.UserDto;
+import com.turing.test.vo.BusinessError;
+import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -29,13 +26,24 @@ import java.util.concurrent.ExecutionException;
 public class UserServiceImpl implements UserService {
     public static final String COL_NAME="users";
 
-    public String addUser(User user) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
+
+        //check for duplicate user email
+        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(user.getEmail());
+        ApiFuture<DocumentSnapshot> future = documentReference.get();
+        DocumentSnapshot document = future.get();
+        if (document.exists()) {
+            return ResultVo.error(BusinessError.DUPLICATE_USER);
+        }
+
+        //add user to firestore
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(user.getEmail()).set(user);
-        return collectionsApiFuture.get().getUpdateTime().toString();
+        log.info("UserServiceImpl->addUser: new user {} added", user.getEmail());
+        return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
     }
 
-    public UserDto findUser(String email) throws InterruptedException, ExecutionException {
+    public ResultVo<UserDto> findUser(String email) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(email);
         ApiFuture<DocumentSnapshot> future = documentReference.get();
@@ -47,9 +55,9 @@ public class UserServiceImpl implements UserService {
         if(document.exists()) {
             User user = document.toObject(User.class);
             BeanUtils.copyProperties(user,userDto);
-            return userDto;
+            return ResultVo.success(userDto);
         }else {
-            return null;
+            return ResultVo.error(BusinessError.UNKNOWN_USER);
         }
     }
 }
