@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -27,7 +28,9 @@ public class ChatbotController {
     public ResultVo<Double> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
         if(!chatbotMap.containsKey("name") || !chatbotMap.containsKey("result"))
             return ResultVo.error(BusinessError.INVALID_PARAM);
-        return chatbotService.updateChatbotStat(chatbotMap.get("name"),Boolean.valueOf(chatbotMap.get("result")));
+        CompletableFuture<ResultVo<Double>> futureResult = chatbotService.updateChatbotStat
+                (chatbotMap.get("name"),Boolean.valueOf(chatbotMap.get("result")));
+        return futureResult.get();
     }
 
 }

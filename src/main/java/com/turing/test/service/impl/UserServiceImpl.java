@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResultVo<UserDto> findUser(String email) throws InterruptedException, ExecutionException {
+        log.info("UserServiceImpl->findUser: finding user {}",email);
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(email);
         ApiFuture<DocumentSnapshot> future = documentReference.get();

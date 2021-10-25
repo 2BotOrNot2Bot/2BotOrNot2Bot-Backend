@@ -1,8 +1,10 @@
 package com.turing.test.service.impl;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.cloud.FirestoreClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import java.io.InputStream;
 **/
 @Slf4j
 @Service
-public class FBInitialize {
+public class FBInitializer {
 
     @PostConstruct
     public void initialize() {

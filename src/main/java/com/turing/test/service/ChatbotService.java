@@ -4,6 +4,7 @@ import com.turing.test.vo.ResultVo;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -13,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public interface ChatbotService {
 
-    @Async
-    ResultVo<Double> updateChatbotStat(String name, Boolean result) throws ExecutionException, InterruptedException;
+    @Async("threadPoolTaskExecutor")
+    CompletableFuture<ResultVo<Double>> updateChatbotStat(String name, Boolean result) throws ExecutionException, InterruptedException;
 
 }
