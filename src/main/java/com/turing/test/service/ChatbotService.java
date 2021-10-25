@@ -1,9 +1,11 @@
 package com.turing.test.service;
 
+import com.turing.test.domain.Chatbot;
 import com.turing.test.vo.ResultVo;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -17,4 +19,5 @@ public interface ChatbotService {
     @Async("threadPoolTaskExecutor")
     CompletableFuture<ResultVo<Double>> updateChatbotStat(String name, Boolean result) throws ExecutionException, InterruptedException;
 
+    ResultVo<List<Chatbot>> getSortedChatbotStat() throws ExecutionException, InterruptedException;
 }

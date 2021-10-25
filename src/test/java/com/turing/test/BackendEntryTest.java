@@ -33,10 +33,8 @@ class BackendEntryTest {
 
     @Test
     void findUser() throws ExecutionException, InterruptedException {
-//        ResultVo<UserDto> user = userService.findUser("lorena@usc.edu");
-        CompletableFuture<ResultVo<Double>> result = chatbotService.updateChatbotStat("testbot",false);
-        log.info("BackendEntryTest->findUser:result is {}",result.get().getMsg());
-        Assertions.assertEquals("success",result.get().getMsg());
+        ResultVo<UserDto> user = userService.findUser("lorena@usc.edu");
+        Assertions.assertEquals("success",user.getMsg());
     }
 
     @Test
@@ -74,6 +72,11 @@ class BackendEntryTest {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void checkGetSortedChatbotStat(){
+
     }
 
 }

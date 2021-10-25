@@ -3,6 +3,7 @@ package com.turing.test.service.impl;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.turing.test.domain.Chatbot;
 import com.turing.test.service.ChatbotService;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -50,6 +53,29 @@ public class ChatbotServiceImpl implements ChatbotService {
                 String.format("%.2f", percentage*100));
 
         return CompletableFuture.completedFuture(ResultVo.success(percentage));
+    }
+
+    @Override
+    public ResultVo<List<Chatbot>> getSortedChatbotStat() throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+
+        // Create a reference to the collection
+        CollectionReference chatbots = dbFirestore.collection("chatbots");
+        // Create a query against the collection.
+        Query query = chatbots.orderBy("percentage", Query.Direction.DESCENDING);
+        // retrieve query results asynchronously using query.get()
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+
+        List<Chatbot> result = new ArrayList<>();
+        if(querySnapshot.get().getDocuments().size()==0){
+            log.error("ChatbotServiceImpl->getSortedChatbotStat: no chatbot found");
+            return ResultVo.error(BusinessError.UNKNOWN_ERROR);
+        }
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            result.add(document.toObject(Chatbot.class));
+        }
+        log.info("ChatbotServiceImpl->getSortedChatbotStat: found {} chatbots", result.size());
+        return ResultVo.success(result);
     }
 
 }

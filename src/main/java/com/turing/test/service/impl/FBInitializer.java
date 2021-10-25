@@ -28,6 +28,11 @@ public class FBInitializer {
             InputStream serviceAccount =
                     this.getClass().getClassLoader().getResourceAsStream("serviceAccountKey.json");
 
+            if(serviceAccount == null){
+                log.error("FBInitializer->initialize: failed to find serviceAccountKey.json");
+                throw new Exception();
+            }
+
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl("https://botornot2bot-8e49c-default-rtdb.firebaseio.com")
