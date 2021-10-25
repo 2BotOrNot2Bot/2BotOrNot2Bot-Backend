@@ -22,8 +22,8 @@ public class AsyncConfig {
         log.info("AsyncConfig->taskExecutor: Creating Async Task Executor");
         final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // core thread: thread number of threads initialized during thread pool
-        executor.setCorePoolSize(8);
-        // Maximum thread: The maximum number of thread pools, only after the buffer queue is full,
+        executor.setCorePoolSize(4);
+        // maximum thread: The maximum number of thread pools, only after the buffer queue is full,
         // the thread exceeding the core thread is applied.
         executor.setMaxPoolSize(8);
         // buffer queue: queue used to buffer execution tasks
