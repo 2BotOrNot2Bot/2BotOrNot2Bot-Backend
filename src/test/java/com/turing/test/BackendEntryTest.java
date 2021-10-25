@@ -4,7 +4,6 @@ import com.turing.test.service.ChatbotService;
 import com.turing.test.service.UserService;
 import com.turing.test.service.dto.UserDto;
 import com.turing.test.vo.ResultVo;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class BackendEntryTest {
 
     @Test
     void findUser() throws ExecutionException, InterruptedException {
-        ResultVo<UserDto> user = userService.findUser("lorena@usc.edu");
+        ResultVo<UserDto> user = userService.findUser("shawn@usc.edu");
         Assertions.assertEquals("success",user.getMsg());
     }
 
