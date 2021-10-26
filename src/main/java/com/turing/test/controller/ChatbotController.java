@@ -40,4 +40,9 @@ public class ChatbotController {
         return chatbotService.getSortedChatbotStat();
     }
 
+    @DeleteMapping("chatbots/stat")
+    public ResultVo<String> clearChatbotStat(@RequestBody String name){
+        return null;
+    }
+
 }

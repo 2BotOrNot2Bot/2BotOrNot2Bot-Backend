@@ -20,4 +20,6 @@ public interface ChatbotService {
     CompletableFuture<ResultVo<Double>> updateChatbotStat(String name, Boolean result) throws ExecutionException, InterruptedException;
 
     ResultVo<List<Chatbot>> getSortedChatbotStat() throws ExecutionException, InterruptedException;
+
+    ResultVo<String> clearChatbotStat();
 }

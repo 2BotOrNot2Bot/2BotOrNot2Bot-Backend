@@ -78,4 +78,10 @@ public class ChatbotServiceImpl implements ChatbotService {
         return ResultVo.success(result);
     }
 
+    @Override
+    public ResultVo<String> clearChatbotStat() {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        return ResultVo.success(null);
+    }
+
 }
