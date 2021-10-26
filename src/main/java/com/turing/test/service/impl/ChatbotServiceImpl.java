@@ -60,7 +60,7 @@ public class ChatbotServiceImpl implements ChatbotService {
         Firestore dbFirestore = FirestoreClient.getFirestore();
 
         // Create a reference to the collection
-        CollectionReference chatbots = dbFirestore.collection("chatbots");
+        CollectionReference chatbots = dbFirestore.collection(COL_NAME);
         // Create a query against the collection.
         Query query = chatbots.orderBy("percentage", Query.Direction.DESCENDING);
         // retrieve query results asynchronously using query.get()
@@ -79,8 +79,33 @@ public class ChatbotServiceImpl implements ChatbotService {
     }
 
     @Override
-    public ResultVo<String> clearChatbotStat() {
+    public ResultVo<String> clearChatbotStat(String name) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
+
+        // Get a new write batch
+        WriteBatch batch = dbFirestore.batch();
+
+        // Set the value
+//        DocumentReference ref = dbFirestore.collection(COL_NAME).document("");
+//        batch.set(ref, new City());
+
+        // Update the field
+        DocumentReference ref = dbFirestore.collection(COL_NAME).document("SF");
+        batch.update(ref, "testCount", 0);
+        batch.update(ref, "successCount", 0);
+        batch.update(ref, "percentage", 0);
+
+        // Delete the document
+//        DocumentReference ref = dbFirestore.collection(COL_NAME).document("");
+//        batch.delete(ref);
+
+        // asynchronously commit the batch
+        ApiFuture<List<WriteResult>> future = batch.commit();
+
+        // future.get() blocks on batch commit operation
+        for (WriteResult result : future.get()) {
+            System.out.println("Update time : " + result.getUpdateTime());
+        }
         return ResultVo.success(null);
     }
 

@@ -41,8 +41,8 @@ public class ChatbotController {
     }
 
     @DeleteMapping("chatbots/stat")
-    public ResultVo<String> clearChatbotStat(@RequestBody String name){
-        return null;
+    public ResultVo<String> clearChatbotStat(@RequestBody String name) throws ExecutionException, InterruptedException {
+        return chatbotService.clearChatbotStat(name);
     }
 
 }
