@@ -39,6 +39,8 @@ class BackendEntryTest {
     @Test
     void checkUpdateChatbotPercentage() throws ExecutionException, InterruptedException {
         try {
+            chatbotService.clearChatbotStat("testbot");
+
 //            CompletableFuture<ResultVo<Double>> result0 = chatbotService.updateChatbotStat("testbot",true).;
 //            CompletableFuture<ResultVo<Double>> result1 = chatbotService.updateChatbotStat("testbot",false);
 //            CompletableFuture<ResultVo<Double>> result2 = chatbotService.updateChatbotStat("testbot",true);

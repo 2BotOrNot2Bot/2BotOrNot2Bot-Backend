@@ -103,10 +103,7 @@ public class ChatbotServiceImpl implements ChatbotService {
         ApiFuture<List<WriteResult>> future = batch.commit();
 
         // future.get() blocks on batch commit operation
-        for (WriteResult result : future.get()) {
-            System.out.println("Update time : " + result.getUpdateTime());
-        }
-        return ResultVo.success(null);
+        return ResultVo.success(future.get().get(0).getUpdateTime().toString());
     }
 
 }
