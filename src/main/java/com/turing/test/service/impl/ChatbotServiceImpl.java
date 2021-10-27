@@ -8,8 +8,6 @@ import com.turing.test.service.ChatbotService;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -86,23 +84,24 @@ public class ChatbotServiceImpl implements ChatbotService {
         WriteBatch batch = dbFirestore.batch();
 
         // Set the value
-//        DocumentReference ref = dbFirestore.collection(COL_NAME).document("");
-//        batch.set(ref, new City());
+//        DocumentReference ref = dbFirestore.collection(COL_NAME).document(name);
+//        batch.set(ref, new Chatbot());
 
         // Update the field
-        DocumentReference ref = dbFirestore.collection(COL_NAME).document("SF");
+        DocumentReference ref = dbFirestore.collection(COL_NAME).document(name);
         batch.update(ref, "testCount", 0);
         batch.update(ref, "successCount", 0);
         batch.update(ref, "percentage", 0);
 
         // Delete the document
-//        DocumentReference ref = dbFirestore.collection(COL_NAME).document("");
+//        DocumentReference ref = dbFirestore.collection(COL_NAME).document(name);
 //        batch.delete(ref);
 
         // asynchronously commit the batch
         ApiFuture<List<WriteResult>> future = batch.commit();
 
         // future.get() blocks on batch commit operation
+        log.info("ChatbotServiceImpl->clearChatbotStat: stat of {} is cleared", name);
         return ResultVo.success(future.get().get(0).getUpdateTime().toString());
     }
 

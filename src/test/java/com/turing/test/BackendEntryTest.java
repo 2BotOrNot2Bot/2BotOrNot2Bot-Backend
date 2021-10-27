@@ -1,5 +1,6 @@
 package com.turing.test;
 
+import com.turing.test.domain.Chatbot;
 import com.turing.test.service.ChatbotService;
 import com.turing.test.service.UserService;
 import com.turing.test.service.dto.UserDto;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -76,8 +78,13 @@ class BackendEntryTest {
     }
 
     @Test
-    void checkGetSortedChatbotStat(){
-
+    void checkGetSortedChatbotStat() throws ExecutionException, InterruptedException {
+        ResultVo<List<Chatbot>> chatbots= chatbotService.getSortedChatbotStat();
+        Assertions.assertEquals("success",chatbots.getMsg());
+        for(Chatbot chatbot : chatbots.getData()){
+            log.info("BackendEntryTest->checkGetSortedChatbotStat: {} has achieved {}%",
+                    chatbot.getName(),String.format("%.2f", chatbot.getPercentage()*100));
+        }
     }
 
 }
