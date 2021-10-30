@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum Chatbots {
 
-    DIALOGFLOW("dialogflow");
+    DIALOGFLOW("dialogflow"),
+    PANDORA_BOTS("pandorabots"),
+    RASA("rasa");
 
     private final String name;
 
