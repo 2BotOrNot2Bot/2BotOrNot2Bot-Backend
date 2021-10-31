@@ -18,4 +18,5 @@ public interface UserService {
 
     ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException;
 
+    ResultVo<UserDto> checkPassword(String email, String password) throws InterruptedException, ExecutionException;
 }
