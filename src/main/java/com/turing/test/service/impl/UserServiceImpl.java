@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 public class UserServiceImpl implements UserService {
     public static final String COL_NAME="users";
 
-    public ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
 
         //check for duplicate user email
