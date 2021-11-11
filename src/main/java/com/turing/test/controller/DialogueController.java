@@ -23,7 +23,7 @@ public class DialogueController {
     DialogueService dialogueService;
 
     @PostMapping("dialogues")
-    public ResultVo<Long> startDialogue(@RequestBody String chatbot) throws IOException {
+    public ResultVo<Long> startDialogue(String chatbot) throws IOException {
         return dialogueService.startDialogue(chatbot);
     }
 

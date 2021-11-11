@@ -1,5 +1,10 @@
 package com.turing.test.service.impl;
 
+import com.google.cloud.dialogflow.v2.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2.QueryInput;
+import com.google.cloud.dialogflow.v2.SessionName;
+import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.turing.test.domain.enums.Chatbots;
 import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
 import com.turing.test.vo.BusinessError;
@@ -19,12 +24,20 @@ public class DialogueServiceImpl implements DialogueService {
     @Override
     public ResultVo<Long> startDialogue(String chatbot) throws IOException {
         // DialogFlow API
-        if(chatbot.equals("dialogflow")){
+        if(Chatbots.DIALOGFLOW.name().equals(chatbot)){
             try (SessionsClient sessionsClient = SessionsClient.create()) {
                 SessionName session = SessionName.ofProjectSessionName("[PROJECT]", "[SESSION]");
                 QueryInput queryInput = QueryInput.newBuilder().build();
                 DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             }
+        }
+        // PANDORABOTS API TODO
+        else if(Chatbots.PANDORA_BOTS.name().equals(chatbot)){
+
+        }
+        // RASA API TODO
+        else if(Chatbots.RASA.name().equals(chatbot)){
+
         }
         return null;
     }

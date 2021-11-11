@@ -18,4 +18,5 @@ public interface UserService {
 
     ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException;
 
+    ResultVo<UserDto> checkPassword(String email, String password) throws InterruptedException, ExecutionException;
 }

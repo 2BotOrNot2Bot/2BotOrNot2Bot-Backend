@@ -3,11 +3,13 @@ package com.turing.test.controller;
 import com.turing.test.domain.User;
 import com.turing.test.service.UserService;
 import com.turing.test.service.dto.UserDto;
+import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,6 +32,13 @@ public class UserController {
     @PostMapping("/users")
     public ResultVo<String> addUser(@RequestBody String firebaseUid) throws InterruptedException, ExecutionException {
         return userService.addUser(firebaseUid);
+    }
+
+    @GetMapping("/signin")
+    public ResultVo<UserDto> checkPassword(@RequestBody Map<String,String> userMap) throws ExecutionException, InterruptedException {
+        if(!userMap.containsKey("email") || !userMap.containsKey("password"))
+            return ResultVo.error(BusinessError.INVALID_PARAM);
+        return userService.checkPassword(userMap.get("email"),userMap.get("password"));
     }
 
 }

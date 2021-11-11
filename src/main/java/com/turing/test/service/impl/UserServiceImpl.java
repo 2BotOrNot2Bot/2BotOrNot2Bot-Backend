@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -27,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 public class UserServiceImpl implements UserService {
     public static final String COL_NAME="users";
 
-    public ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
 
         //check for duplicate user email
@@ -65,5 +66,27 @@ public class UserServiceImpl implements UserService {
         }else {
             return ResultVo.error(BusinessError.UNKNOWN_USER);
         }
+    }
+
+    @Override
+    public ResultVo<UserDto> checkPassword(String email, String password) throws InterruptedException, ExecutionException {
+        log.info("UserServiceImpl->checkPassword: logging in user {}", email);
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(email);
+        ApiFuture<DocumentSnapshot> future = documentReference.get();
+
+        DocumentSnapshot document = future.get();
+
+        if(document.exists()) {
+            if(Objects.equals(document.getString("password"), password)){
+                UserDto userDto = new UserDto();
+                User user = document.toObject(User.class);
+                BeanUtils.copyProperties(user,userDto);
+                log.info("UserServiceImpl->checkPassword: logged in");
+                return ResultVo.success(userDto);
+            }
+        }
+        log.info("UserServiceImpl->checkPassword: log in failed");
+        return ResultVo.error(BusinessError.ACCESS_NOT_GRANTED);
     }
 }
