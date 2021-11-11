@@ -16,6 +16,6 @@ public interface UserService {
 
     ResultVo<UserDto> findUser(String email) throws InterruptedException, ExecutionException;
 
-    ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException;
+    ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException;
 
 }

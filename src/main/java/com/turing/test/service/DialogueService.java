@@ -13,4 +13,6 @@ import java.io.IOException;
 public interface DialogueService {
 
     ResultVo<Long> startDialogue(String chatbot) throws IOException;
+
+    ResultVo<String> getResponse(String input, String chatbot) throws IOException;
 }

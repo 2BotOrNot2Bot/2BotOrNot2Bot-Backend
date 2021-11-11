@@ -13,9 +13,7 @@ public class User {
 
     private Long uid;
 
-    private String email;
-
-    private String password;
+    private String firebaseUid;
 
     private Integer points;
 

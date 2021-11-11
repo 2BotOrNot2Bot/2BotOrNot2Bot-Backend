@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,21 +27,24 @@ import java.util.concurrent.ExecutionException;
 public class UserServiceImpl implements UserService {
     public static final String COL_NAME="users";
 
-    public ResultVo<String> addUser(User user) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
 
         //check for duplicate user email
-        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(user.getEmail());
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        DocumentSnapshot document = future.get();
-        if (document.exists()) {
-            return ResultVo.error(BusinessError.DUPLICATE_USER);
-        }
+//        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(user.getEmail());
+//        ApiFuture<DocumentSnapshot> future = documentReference.get();
+//        DocumentSnapshot document = future.get();
+//        if (document.exists()) {
+//            return ResultVo.error(BusinessError.DUPLICATE_USER);
+//        }
 
         //add user to firestore
+        User user = new User();
+        long uid = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+        user.setUid(uid);
         user.setPoints(0); //initial points is 0
-        ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(user.getEmail()).set(user);
-        log.info("UserServiceImpl->addUser: new user {} added", user.getEmail());
+        ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(firebaseUid).set(user);
+        log.info("UserServiceImpl->addUser: new user with uid {} added", uid);
         return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
     }
 

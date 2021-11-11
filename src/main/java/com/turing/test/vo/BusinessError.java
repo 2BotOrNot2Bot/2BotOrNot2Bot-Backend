@@ -13,6 +13,7 @@ public enum BusinessError {
     ACCESS_NOT_GRANTED("002","access not granted, please contact administrator"),
     UNKNOWN_USER("003","didn't find the user"),
     DUPLICATE_USER("004","the user email already exists"),
+    FALLBACK_INTENT("005","chatbot failed to comprehend"),
     UNKNOWN_ERROR("999","please take a screenshot of the error and send it to yibowen@usc.edu");
 
     private final String code;

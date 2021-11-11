@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResultVo<String> addUser(@RequestBody User user) throws InterruptedException, ExecutionException {
-        return userService.addUser(user);
+    public ResultVo<String> addUser(@RequestBody String firebaseUid) throws InterruptedException, ExecutionException {
+        return userService.addUser(firebaseUid);
     }
 
 }
