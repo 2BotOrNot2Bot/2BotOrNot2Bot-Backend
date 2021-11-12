@@ -1,4 +1,4 @@
-package com.turing.test.service.impl;
+package com.turing.test.service.util;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
