@@ -11,12 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    private Long uid;
-
-    private String firebaseUid;
+    private String uid;
 
     private Integer points;
-
-    private Integer role;
 
 }
