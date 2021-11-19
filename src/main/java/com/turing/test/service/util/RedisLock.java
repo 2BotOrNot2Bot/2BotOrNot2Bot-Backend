@@ -1,6 +1,7 @@
 package com.turing.test.service.util;
 
 import com.google.common.base.Strings;
+import io.lettuce.core.RedisException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -33,6 +34,6 @@ public class RedisLock {
             return redisTemplate.opsForValue().getOperations().delete(lockKey);
         }
         log.warn("RedisLock->tryUnlock: unlock error");
-        return false;
+        throw new RedisException("Unlock failed");
     }
 }
