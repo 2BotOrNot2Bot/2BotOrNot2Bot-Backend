@@ -1,10 +1,7 @@
 package com.turing.test.controller;
 
 import com.turing.test.domain.Chatbot;
-import com.turing.test.domain.User;
 import com.turing.test.service.ChatbotService;
-import com.turing.test.service.UserService;
-import com.turing.test.service.dto.UserDto;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ public class ChatbotController {
     @Autowired
     ChatbotService chatbotService;
 
-    @PostMapping("/chatbots/stat")
+    @PostMapping("/chatbots/stats")
     public ResultVo<Double> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
         if(!chatbotMap.containsKey("name") || !chatbotMap.containsKey("result"))
             return ResultVo.error(BusinessError.INVALID_PARAM);
@@ -35,12 +32,12 @@ public class ChatbotController {
         return futureResult.get();
     }
 
-    @GetMapping("chatbots/stat")
+    @GetMapping("chatbots/stats")
     public ResultVo<List<Chatbot>> getChatbotStat() throws InterruptedException, ExecutionException {
         return chatbotService.getSortedChatbotStat();
     }
 
-    @DeleteMapping("chatbots/stat")
+    @DeleteMapping("chatbots/stats")
     public ResultVo<String> clearChatbotStat(@RequestBody String name) throws ExecutionException, InterruptedException {
         return chatbotService.clearChatbotStat(name);
     }
