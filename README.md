@@ -123,7 +123,7 @@ Example response body:
 Clear stats of a chatbot (use with caution)
 
 ### Dialogue
-#### Start Dialogue
+#### ~~Start Dialogue~~ (Probably unnecessary)
 
 **POST `/dialogues`**
 
@@ -131,9 +131,27 @@ Start a new dialogue
 
 #### Continue Dialogue
 
-**POST `/dialogues`**
+**PATCH `/dialogues`**
 
-Continue a new dialogue
+Get response from an ongoing dialogue
+
+Example request body **(Dialogflow)**:
+```json
+{
+  "input": "Hello!",
+  "chatbot": "dialogflow",
+  "session": "1234567"
+}
+```
+
+Example response body:
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": "Hi! I'm absolutely a human!"
+}
+```
 
 ## Deployment (TBD)
 Hosting on Heroku/Firebase

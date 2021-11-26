@@ -35,22 +35,22 @@ public class DialogueServiceImpl implements DialogueService {
 
     @Override
     public ResultVo<Long> startDialogue(String chatbot) throws IOException {
-        // DialogFlow API
-        if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
-            try (SessionsClient sessionsClient = SessionsClient.create()) {
-                SessionName session = SessionName.ofProjectSessionName("[PROJECT]", "[SESSION]");
-                QueryInput queryInput = QueryInput.newBuilder().build();
-                DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
-            }
-        }
-        // PANDORABOTS API TODO
-        else if(Chatbots.PANDORA_BOTS.name().equals(chatbot)){
-
-        }
-        // RASA API TODO
-        else if(Chatbots.RASA.name().equals(chatbot)){
-
-        }
+//        // DialogFlow API
+//        if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
+//            try (SessionsClient sessionsClient = SessionsClient.create()) {
+//                SessionName session = SessionName.ofProjectSessionName("[PROJECT]", "[SESSION]");
+//                QueryInput queryInput = QueryInput.newBuilder().build();
+//                DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
+//            }
+//        }
+//        // PANDORABOTS API TODO
+//        else if(Chatbots.PANDORA_BOTS.name().equals(chatbot)){
+//
+//        }
+//        // RASA API TODO
+//        else if(Chatbots.RASA.name().equals(chatbot)){
+//
+//        }
         return null;
     }
 
