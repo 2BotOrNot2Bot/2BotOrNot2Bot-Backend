@@ -29,8 +29,9 @@ public class DialogueController {
 
     @PatchMapping("dialogues")
     public ResultVo<String> continueDialogue(@RequestBody Map<String,String> dialogueMap) throws IOException {
-        if(!dialogueMap.containsKey("input") || !dialogueMap.containsKey("chatbot"))
+        if(!dialogueMap.containsKey("input") || !dialogueMap.containsKey("chatbot") || !dialogueMap.containsKey("session"))
             return ResultVo.error(BusinessError.INVALID_PARAM);
-        return dialogueService.getResponse(dialogueMap.get("input"),dialogueMap.get("chatbot"));
+        return dialogueService.getResponse(dialogueMap.get("input"),dialogueMap.get("chatbot"),dialogueMap.get("session"));
     }
+
 }

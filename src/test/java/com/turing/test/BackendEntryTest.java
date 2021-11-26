@@ -3,6 +3,7 @@ package com.turing.test;
 import com.turing.test.domain.Chatbot;
 import com.turing.test.domain.User;
 import com.turing.test.service.ChatbotService;
+import com.turing.test.service.DialogueService;
 import com.turing.test.service.UserService;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -31,6 +33,9 @@ class BackendEntryTest {
 
     @Autowired
     ChatbotService chatbotService;
+
+    @Autowired
+    DialogueService dialogueService;
 
     @Test
     void findUser() throws ExecutionException, InterruptedException {
@@ -85,6 +90,13 @@ class BackendEntryTest {
             log.info("BackendEntryTest->checkGetSortedChatbotStat: {} has achieved {}%",
                     chatbot.getName(),String.format("%.2f", chatbot.getPercentage()*100));
         }
+    }
+    
+    @Test
+    void checkGetResponseFromDialogflow() throws IOException {
+        ResultVo<String> response = dialogueService.getResponse("Hello","dialogflow", "123edf");
+        Assertions.assertEquals("success",response.getMsg());
+        log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
     }
 
 }

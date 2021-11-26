@@ -15,7 +15,7 @@ public enum Chatbots {
 
     private final String name;
 
-    String getName(){
+    public String getName(){
         return this.name;
     }
 }
