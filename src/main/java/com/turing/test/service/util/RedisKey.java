@@ -14,4 +14,6 @@ public enum RedisKey {
 
     private String key;
 
+    public String getKey(){return key;}
+
 }

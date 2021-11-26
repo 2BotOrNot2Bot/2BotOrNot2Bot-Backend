@@ -23,7 +23,7 @@ public class RedisUtils {
     // Add to set with key
     public Boolean addToSet(String key, String id){
         while(true){
-            if(redisLock.tryLock(key,id,500L)){
+            if(redisLock.tryLock(key,id)){
                 Boolean result = redisTemplate.opsForSet().add(key, id) == 1;
                 redisLock.tryUnlock(key,id);
                 return result;
@@ -35,7 +35,7 @@ public class RedisUtils {
     // Add to Hash with key
     public Boolean addToHash(String key, String id, String target){
         while(true){
-            if(redisLock.tryLock(key,id,500L)){
+            if(redisLock.tryLock(key,id)){
                 Boolean result = redisTemplate.opsForHash().putIfAbsent(key,id,target);
                 redisLock.tryUnlock(key,id);
                 return result;
@@ -48,7 +48,7 @@ public class RedisUtils {
     // If failed, return null
     public String popTwo(String key, String id){
         while(true){
-            if(redisLock.tryLock(key,id,500L)){
+            if(redisLock.tryLock(key,id)){
                 if(redisTemplate.hasKey(key) && redisTemplate.opsForSet().size(key)>=2){
                     String result = redisTemplate.opsForSet().remove(key,id) == 1 ? redisTemplate.opsForSet().pop(key) : null;
                     redisLock.tryUnlock(key,id);
@@ -62,7 +62,7 @@ public class RedisUtils {
 
     public boolean findInSet(String key, String id){
         while(true){
-            if(redisLock.tryLock(key,id,500L)){
+            if(redisLock.tryLock(key,id)){
                 Boolean result = redisTemplate.opsForSet().isMember(key,id);
                 redisLock.tryUnlock(key,id);
                 return result;
@@ -73,7 +73,7 @@ public class RedisUtils {
 
     public String getValueInHash(String key, String id){
         while(true){
-            if(redisLock.tryLock(key,id,500L)){
+            if(redisLock.tryLock(key,id)){
                 String result = redisTemplate.opsForHash().get(key,id).toString();
                 redisLock.tryUnlock(key,id);
                 return result;

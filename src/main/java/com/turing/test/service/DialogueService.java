@@ -12,6 +12,10 @@ import java.io.IOException;
 @Service
 public interface DialogueService {
 
+    ResultVo<Boolean> startSearch(String uid);
+
+    ResultVo<String> findOpponent(String uid);
+
     ResultVo<Long> startDialogue(String chatbot) throws IOException;
 
     ResultVo<String> getResponse(String input, String chatbot, String sessionId) throws IOException;

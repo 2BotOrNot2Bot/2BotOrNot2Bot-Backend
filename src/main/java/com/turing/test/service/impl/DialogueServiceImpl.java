@@ -13,6 +13,9 @@ import com.google.common.collect.Lists;
 import com.turing.test.domain.enums.Chatbots;
 import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
+import com.turing.test.service.util.RedisKey;
+import com.turing.test.service.util.RedisLock;
+import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,43 @@ public class DialogueServiceImpl implements DialogueService {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private RedisLock redisLock;
+
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Override
+    public ResultVo<Boolean> startSearch(String uid) {
+        String key = RedisKey.WAITING_QUEUE.getKey();
+        // Need to modify waiting queue, obtain lock
+        redisLock.tryLock(key,uid);
+        // Add to waiting queue in Redis
+        redisUtils.addToSet(key,uid);
+        // Release lock
+        redisLock.tryUnlock(key, uid);
+        log.info("DialogueServiceImpl->startSearch: Added {} to queue",uid);
+        return ResultVo.success(Boolean.TRUE);
+    }
+
+    @Override
+    public ResultVo<String> findOpponent(String uid) {
+        String key = RedisKey.WAITING_QUEUE.getKey();
+        // Need to modify waiting queue, obtain lock
+        redisLock.tryLock(key,uid);
+        String opponent = redisUtils.popTwo(key,uid);
+        if(opponent==null){
+            log.info("DialogueServiceImpl->findOpponent: Not enough people waiting");
+            // Release lock
+            redisLock.tryUnlock(key, uid);
+            return ResultVo.success(null);
+        }
+        log.info("DialogueServiceImpl->findOpponent: Found opponent {}",opponent);
+        // Release lock
+        redisLock.tryUnlock(key, uid);
+        return ResultVo.success(opponent);
+    }
 
     @Override
     public ResultVo<Long> startDialogue(String chatbot) throws IOException {

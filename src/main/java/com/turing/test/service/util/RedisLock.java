@@ -20,8 +20,10 @@ public class RedisLock {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public Boolean tryLock(String lockKey, String clientId, long millis){
-        if(Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(lockKey, clientId, Duration.ofMillis(millis)))){
+    private long timeout = 200L;
+
+    public Boolean tryLock(String lockKey, String clientId){
+        if(Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(lockKey, clientId, Duration.ofMillis(timeout)))){
             return true;
         }
         log.warn("RedisLock->tryLock: lock error");
