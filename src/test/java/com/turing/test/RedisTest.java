@@ -31,7 +31,7 @@ class RedisTest {
     DialogueService dialogueService;
 
     @Test
-    void startSearch(){
+    void startSearch() throws InterruptedException {
         dialogueService.startSearch("123456");
         ResultVo<String> result = dialogueService.findOpponent("123456");
         Assertions.assertNull(result.getData());
@@ -40,6 +40,9 @@ class RedisTest {
         Assertions.assertEquals("123456",result1.getData());
         ResultVo<String> result2 = dialogueService.findOpponent("123456");
         Assertions.assertEquals("888888",result2.getData());
+        Thread.sleep(1000L);
+        dialogueService.endDialogue("123456");
+        dialogueService.endDialogue("888888");
     }
     
     @Test

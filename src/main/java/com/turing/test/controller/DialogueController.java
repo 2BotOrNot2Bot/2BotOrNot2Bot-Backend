@@ -20,17 +20,17 @@ public class DialogueController {
     DialogueService dialogueService;
 
     @PostMapping("dialogues/search")
-    public ResultVo<Boolean> startSearch(String uid) {
+    public ResultVo<Boolean> startSearch(@RequestParam String uid) {
         return dialogueService.startSearch(uid);
     }
 
     @GetMapping("dialogues/search")
-    public ResultVo<String> getOpponent(String uid) {
+    public ResultVo<String> getOpponent(@RequestParam String uid) {
         return dialogueService.findOpponent(uid);
     }
 
     @PostMapping("dialogues")
-    public ResultVo<Long> startDialogue(String chatbot) {
+    public ResultVo<Long> startDialogue(@RequestParam String chatbot) {
         return dialogueService.startDialogue(chatbot);
     }
 
@@ -42,7 +42,7 @@ public class DialogueController {
     }
 
     @DeleteMapping("dialogues")
-    public ResultVo<Boolean> endDialogue(String uid) {
+    public ResultVo<Boolean> endDialogue(@RequestParam String uid) {
         return dialogueService.endDialogue(uid);
     }
 

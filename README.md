@@ -123,6 +123,45 @@ Example response body:
 Clear stats of a chatbot (use with caution)
 
 ### Dialogue
+#### Start Search
+
+**POST `/dialogues/search?uid=123456`**
+
+Start searching for opponents
+
+Example response body:
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": true
+}
+```
+
+#### Get Opponent
+
+**GET `/dialogues/search?uid=123456`**
+
+Get available opponent **(must call after starting search)**
+
+Example response body (no matching):
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": null
+}
+```
+
+Example response body (matched):
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": "888888"
+}
+```
+
 #### ~~Start Dialogue~~ (Probably unnecessary)
 
 **POST `/dialogues`**
@@ -150,6 +189,21 @@ Example response body:
   "code": "000",
   "msg": "success",
   "data": "Hi! I'm absolutely a human!"
+}
+```
+
+#### End Dialogue
+
+**GET `/dialogues?uid=123456`**
+
+End the current dialogue **(must call after a dialogue completes)**
+
+Example response body:
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": true
 }
 ```
 

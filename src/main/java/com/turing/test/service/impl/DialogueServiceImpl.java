@@ -130,6 +130,7 @@ public class DialogueServiceImpl implements DialogueService {
     @Override
     public ResultVo<Boolean> endDialogue(String uid) {
         String key = RedisKey.CHATTING_STATUS.getKey();
+        log.info("DialogueServiceImpl->endDialogue: Ending dialogue for {}",uid);
         return redisUtils.deleteInHash(key,uid) ? ResultVo.success(Boolean.TRUE)
                 : ResultVo.error(BusinessError.UNKNOWN_ERROR);
     }
