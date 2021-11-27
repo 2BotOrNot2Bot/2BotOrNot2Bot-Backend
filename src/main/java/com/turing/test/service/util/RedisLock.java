@@ -23,7 +23,8 @@ public class RedisLock {
     private long timeout = 200L;
 
     public Boolean tryLock(String lockKey, String clientId){
-        if(Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(lockKey, clientId, Duration.ofMillis(timeout)))){
+        if(Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent("LOCK_"+lockKey, clientId, Duration.ofMillis(timeout)))){
+            log.info("RedisLock->tryLock: lock acquired");
             return true;
         }
         log.warn("RedisLock->tryLock: lock error");
@@ -31,9 +32,10 @@ public class RedisLock {
     }
 
     public Boolean tryUnlock(String lockKey, String clientId){
-        String id = redisTemplate.opsForValue().get(lockKey);
+        String id = redisTemplate.opsForValue().get("LOCK_"+lockKey);
         if(!Strings.isNullOrEmpty(id) && id.equals(clientId)){
-            return redisTemplate.opsForValue().getOperations().delete(lockKey);
+            log.info("RedisLock->tryUnlock: lock released");
+            return redisTemplate.opsForValue().getOperations().delete("LOCK_"+lockKey);
         }
         log.warn("RedisLock->tryUnlock: unlock error");
         throw new RedisException("Unlock failed");

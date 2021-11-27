@@ -3,7 +3,11 @@ package com.turing.test.service.util;
 import io.lettuce.core.RedisException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +22,7 @@ public class RedisUtils {
     RedisLock redisLock;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    StringRedisTemplate redisTemplate;
 
     // Add to set with key
     public Boolean addToSet(String key, String id){
@@ -52,7 +56,7 @@ public class RedisUtils {
                 redisLock.tryUnlock(key,id);
                 return true;
             }
-            log.warn("RedisUtils->addToHash: failed to get lock, retrying...");
+            log.warn("RedisUtils->updateToHash: failed to get lock, retrying...");
         }
     }
 
