@@ -7,9 +7,6 @@ import com.google.cloud.dialogflow.v2.DetectIntentResponse;
 import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
-import com.google.common.collect.Lists;
 import com.turing.test.domain.enums.Chatbots;
 import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
@@ -37,18 +34,15 @@ public class DialogueServiceImpl implements DialogueService {
     private Environment env;
 
     @Autowired
-    private RedisLock redisLock;
-
-    @Autowired
     private RedisUtils redisUtils;
 
     @Override
     public ResultVo<Boolean> startSearch(String uid) {
         String key = RedisKey.WAITING_QUEUE.getKey();
         // Add to waiting queue in Redis, lock acquired and released
-        redisUtils.addToSet(key,uid);
+        Boolean result = redisUtils.addToSet(key,uid);
         log.info("DialogueServiceImpl->startSearch: Added {} to queue",uid);
-        return ResultVo.success(Boolean.TRUE);
+        return result ? ResultVo.success(Boolean.TRUE) : ResultVo.error(BusinessError.UNKNOWN_ERROR);
     }
 
     @Override
@@ -128,6 +122,13 @@ public class DialogueServiceImpl implements DialogueService {
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
         return ResultVo.error(BusinessError.INVALID_PARAM);
+    }
+
+    @Override
+    public ResultVo<Boolean> endDialogue(String uid) {
+        String key = RedisKey.CHATTING_STATUS.getKey();
+        return redisUtils.deleteInHash(key,uid) ? ResultVo.success(Boolean.TRUE)
+                : ResultVo.error(BusinessError.UNKNOWN_ERROR);
     }
 
     private SessionsSettings authDialogflow() throws IOException {

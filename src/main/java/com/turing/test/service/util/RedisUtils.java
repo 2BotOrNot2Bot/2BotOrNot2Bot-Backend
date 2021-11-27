@@ -100,4 +100,15 @@ public class RedisUtils {
         }
     }
 
+    public Boolean deleteInHash(String key, String id){
+        while(true){
+            if(redisLock.tryLock(key,id)){
+                Long result = redisTemplate.opsForHash().delete(key,id);
+                redisLock.tryUnlock(key,id);
+                return result==1;
+            }
+            log.info("RedisUtils->deleteInHash: failed to get lock, retrying...");
+        }
+    }
+
 }
