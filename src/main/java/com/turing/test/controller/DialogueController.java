@@ -30,7 +30,7 @@ public class DialogueController {
     }
 
     @PostMapping("dialogues")
-    public ResultVo<Long> startDialogue(String chatbot) throws IOException {
+    public ResultVo<Long> startDialogue(String chatbot) {
         return dialogueService.startDialogue(chatbot);
     }
 

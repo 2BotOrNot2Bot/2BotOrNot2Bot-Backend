@@ -77,7 +77,7 @@ public class DialogueServiceImpl implements DialogueService {
     }
 
     @Override
-    public ResultVo<Long> startDialogue(String chatbot) throws IOException {
+    public ResultVo<Long> startDialogue(String chatbot) {
 //        // DialogFlow API
 //        if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
 //            try (SessionsClient sessionsClient = SessionsClient.create()) {
@@ -98,7 +98,7 @@ public class DialogueServiceImpl implements DialogueService {
     }
 
     @Override
-    public ResultVo<String> getResponse(String input, String chatbot, String sessionId) throws IOException {
+    public ResultVo<String> getResponse(String input, String chatbot, String sessionId) {
         // DialogFlow API
         if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
             // Instantiates a client
@@ -118,6 +118,9 @@ public class DialogueServiceImpl implements DialogueService {
                     return ResultVo.error(BusinessError.FALLBACK_INTENT);
                 }
                 return ResultVo.success(queryResult.getFulfillmentMessages(0).getText().getText(0));
+            } catch (IOException e) {
+                log.info("DialogueServiceImpl->getResponse: IOException");
+                e.printStackTrace();
             }
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
@@ -131,12 +134,19 @@ public class DialogueServiceImpl implements DialogueService {
                 : ResultVo.error(BusinessError.UNKNOWN_ERROR);
     }
 
-    private SessionsSettings authDialogflow() throws IOException {
-        InputStream serviceAccount =
-                this.getClass().getClassLoader().getResourceAsStream("dialogflowServiceAccountKey.json");
-        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-        String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
-        SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
-        return settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
+    private SessionsSettings authDialogflow() {
+        try {
+            InputStream serviceAccount =
+                    this.getClass().getClassLoader().getResourceAsStream("dialogflowServiceAccountKey.json");
+            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+            String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
+            SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
+            return settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
+        } catch (IOException e) {
+            log.warn("DialogueServiceImpl->authDialogflow: IOException");
+            e.printStackTrace();
+        }
+        return null;
     }
+
 }

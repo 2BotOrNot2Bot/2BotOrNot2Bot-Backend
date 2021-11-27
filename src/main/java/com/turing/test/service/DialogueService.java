@@ -16,9 +16,9 @@ public interface DialogueService {
 
     ResultVo<String> findOpponent(String uid);
 
-    ResultVo<Long> startDialogue(String chatbot) throws IOException;
+    ResultVo<Long> startDialogue(String chatbot);
 
-    ResultVo<String> getResponse(String input, String chatbot, String sessionId) throws IOException;
+    ResultVo<String> getResponse(String input, String chatbot, String sessionId);
 
     ResultVo<Boolean> endDialogue(String uid);
 }
