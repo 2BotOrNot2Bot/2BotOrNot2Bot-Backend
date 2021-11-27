@@ -45,32 +45,41 @@ public class DialogueServiceImpl implements DialogueService {
     @Override
     public ResultVo<Boolean> startSearch(String uid) {
         String key = RedisKey.WAITING_QUEUE.getKey();
-        // Need to modify waiting queue, obtain lock
-        redisLock.tryLock(key,uid);
-        // Add to waiting queue in Redis
+        // Add to waiting queue in Redis, lock acquired and released
         redisUtils.addToSet(key,uid);
-        // Release lock
-        redisLock.tryUnlock(key, uid);
         log.info("DialogueServiceImpl->startSearch: Added {} to queue",uid);
         return ResultVo.success(Boolean.TRUE);
     }
 
     @Override
     public ResultVo<String> findOpponent(String uid) {
-        String key = RedisKey.WAITING_QUEUE.getKey();
-        // Need to modify waiting queue, obtain lock
-        redisLock.tryLock(key,uid);
-        String opponent = redisUtils.popTwo(key,uid);
-        if(opponent==null){
-            log.info("DialogueServiceImpl->findOpponent: Not enough people waiting");
-            // Release lock
-            redisLock.tryUnlock(key, uid);
-            return ResultVo.success(null);
+        String waiting_key = RedisKey.WAITING_QUEUE.getKey();
+        String chatting_key = RedisKey.CHATTING_STATUS.getKey();
+        // Still in Waiting Queue
+        if(redisUtils.findInSet(waiting_key,uid)){
+            // Need to modify waiting queue, lock acquired and released
+            String opponent = redisUtils.popTwo(waiting_key,uid);
+            if(opponent==null){
+                log.info("DialogueServiceImpl->findOpponent: Not enough people waiting");
+                return ResultVo.success(null);
+            }
+            log.info("DialogueServiceImpl->findOpponent: Found opponent {}",opponent);
+            // Need to change both players chatting status, obtain lock
+            redisUtils.updateToHash(chatting_key,uid,opponent);
+            redisUtils.updateToHash(chatting_key,opponent,uid);
+            log.info("DialogueServiceImpl->findOpponent: Updated chatting status");
+            return ResultVo.success(opponent);
         }
-        log.info("DialogueServiceImpl->findOpponent: Found opponent {}",opponent);
-        // Release lock
-        redisLock.tryUnlock(key, uid);
-        return ResultVo.success(opponent);
+        // Already removed from Waiting Queue by an opponent
+        else {
+            String opponent = redisUtils.getValueInHash(chatting_key,uid);
+            if(opponent==null){
+                log.error("DialogueServiceImpl->findOpponent: Redis Hash does not contain this uid");
+                return ResultVo.error(BusinessError.UNKNOWN_ERROR);
+            }
+            log.info("DialogueServiceImpl->findOpponent: Found opponent {}",opponent);
+            return ResultVo.success(opponent);
+        }
     }
 
     @Override

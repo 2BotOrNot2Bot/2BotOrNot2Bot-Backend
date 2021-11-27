@@ -33,12 +33,24 @@ public class RedisUtils {
     }
 
     // Add to Hash with key
-    public Boolean addToHash(String key, String id, String target){
+//    public Boolean addToHash(String key, String id, String target){
+//        while(true){
+//            if(redisLock.tryLock(key,id)){
+//                Boolean result = redisTemplate.opsForHash().putIfAbsent(key,id,target);
+//                redisLock.tryUnlock(key,id);
+//                return result;
+//            }
+//            log.warn("RedisUtils->addToHash: failed to get lock, retrying...");
+//        }
+//    }
+
+    // Update to Hash with key, add if not exist
+    public Boolean updateToHash(String key, String id, String target){
         while(true){
             if(redisLock.tryLock(key,id)){
-                Boolean result = redisTemplate.opsForHash().putIfAbsent(key,id,target);
+                redisTemplate.opsForHash().put(key,id,target);
                 redisLock.tryUnlock(key,id);
-                return result;
+                return true;
             }
             log.warn("RedisUtils->addToHash: failed to get lock, retrying...");
         }
@@ -54,6 +66,7 @@ public class RedisUtils {
                     redisLock.tryUnlock(key,id);
                     return result;
                 }
+                redisLock.tryUnlock(key,id);
                 return null;
             }
             log.warn("RedisUtils->popTwo: failed to get lock, retrying...");
@@ -74,9 +87,14 @@ public class RedisUtils {
     public String getValueInHash(String key, String id){
         while(true){
             if(redisLock.tryLock(key,id)){
-                String result = redisTemplate.opsForHash().get(key,id).toString();
+                if(redisTemplate.opsForHash().hasKey(key,id)){
+                    String result = redisTemplate.opsForHash().get(key,id).toString();
+                    redisLock.tryUnlock(key,id);
+                    return result;
+                }
                 redisLock.tryUnlock(key,id);
-                return result;
+                log.info("RedisUtils->getValueInHash: provided key doesn't exist");
+                return null;
             }
             log.warn("RedisUtils->getValueInHash: failed to get lock, retrying...");
         }
