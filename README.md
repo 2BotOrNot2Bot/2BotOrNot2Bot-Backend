@@ -36,7 +36,7 @@ Example response body:
 }
 ```
 
-#### Sign Up
+#### Find User
 
 **GET `/users?uid=1234567890`**
 
