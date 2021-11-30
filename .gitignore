@@ -13,5 +13,4 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 ##credential
-serviceAccountKey*
-/src/main/resources/application.properties
+/src/main/resources/

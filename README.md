@@ -18,6 +18,12 @@ It achieves the stable matching mechanism with [Redis](https://redis.io/).
 ## Configuration
 Please download the file from Firebase console and put it under the resource folder with name `serviceAccountKey.json`.
 
+Please set relevant Redis configuration, name of dialogflow project id as `DIALOGFLOW_PROJECT_ID` and put it under the 
+resource folder with name `application.properties`.
+
+Please download the file from GCP console of your Dialogflow project and put it under the resource folder with 
+name `dialogflowServiceAccountKey.json`.
+
 ## Endpoints
 
 ### User
