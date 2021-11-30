@@ -1,10 +1,6 @@
 package com.turing.test;
 
-import com.turing.test.domain.Chatbot;
-import com.turing.test.domain.User;
-import com.turing.test.service.ChatbotService;
 import com.turing.test.service.DialogueService;
-import com.turing.test.service.UserService;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -15,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
 * @Author Yibo Wen
