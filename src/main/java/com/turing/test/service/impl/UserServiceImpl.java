@@ -70,4 +70,12 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl->updateUserPoints: User Point Updated to {}",score);
         return ResultVo.success((int)score);
     }
+
+    @Override
+    public ResultVo<String> deleteUser(String firebaseUid) throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(firebaseUid).delete();
+        log.warn("UserServiceImpl->deleteUser: user {} deleted",firebaseUid);
+        return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
+    }
 }

@@ -18,4 +18,6 @@ public interface UserService {
     ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException;
 
     ResultVo<Integer> updateUserPoints(String firebaseUid, Boolean answer) throws ExecutionException, InterruptedException;
+
+    ResultVo<String> deleteUser(String firebaseUid) throws ExecutionException, InterruptedException;
 }

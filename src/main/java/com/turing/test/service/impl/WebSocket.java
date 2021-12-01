@@ -16,23 +16,23 @@ import java.util.concurrent.ConcurrentHashMap;
 * @Author Yibo Wen
 * @Date 11/29/2021 11:51 PM
 **/
-@ServerEndpoint("/chat/{uid}/{target_uid}")
+@ServerEndpoint("/chat/{uid}/{chatterUid}")
 @Component
 @Slf4j
 public class WebSocket {
 
     private String uid;
 
-    private String target_uid;
+    private String chatterUid;
 
     private Session session;
 
     private static Map<String,WebSocket> webSocketMap = new ConcurrentHashMap<>();
 
     @OnOpen
-    public void openConnect(@PathParam("uid") String uid, @PathParam("target_uid") String target_uid, Session session) {
+    public void openConnect(@PathParam("uid") String uid, @PathParam("chatterUid") String chatterUid, Session session) {
         this.uid = uid;
-        this.target_uid = target_uid;
+        this.chatterUid = chatterUid;
         this.session = session;
         webSocketMap.put(uid,this);
         log.info("WebSocket->openConnect: {} connected to server", uid);
@@ -51,7 +51,7 @@ public class WebSocket {
 
     @OnMessage
     public void send(String message, Session session) throws IOException {
-        webSocketMap.get(target_uid).session.getBasicRemote().sendText(message);
+        webSocketMap.get(chatterUid).session.getBasicRemote().sendText(message);
     }
 
 }
