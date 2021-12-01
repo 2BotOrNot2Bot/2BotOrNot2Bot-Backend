@@ -19,21 +19,21 @@ import java.util.concurrent.ExecutionException;
 **/
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserTest {
 
     @Autowired
     UserService userService;
 
     @Test
-    void startSearch() throws InterruptedException, ExecutionException {
+    void updateUser() throws InterruptedException, ExecutionException {
         String uid = "testUser";
         ResultVo<String> result = userService.addUser(uid);
         Assertions.assertEquals("success", result.getMsg());
         ResultVo<Integer> result1 = userService.updateUserPoints(uid,true);
         Assertions.assertEquals(60, result1.getData());
         ResultVo<Integer> result2 = userService.updateUserPoints(uid,false);
-        Assertions.assertEquals(55, result1.getData());
+        Assertions.assertEquals(55, result2.getData());
         ResultVo<String> result3 = userService.deleteUser(uid);
     }
 
