@@ -49,7 +49,7 @@ Example response body:
 }
 ```
 
-#### Find User
+#### Find User - Login
 
 **GET `/users?uid=1234567890`**
 
@@ -74,22 +74,31 @@ Example response body:
 }
 ```
 
-#### Update User Points
+[comment]: <> (#### Update User Points)
 
-**PATCH `/users?uid=1234567890&result=true`**
+[comment]: <> (和update chatbot stats合并成一个, 留 /chatbots/stats)
 
-**PATCH `/users?uid=1234567890&result=false`**
+[comment]: <> (**PATCH `/users?uid=1234567890&result=true`**)
 
-Update user points after each testing finishes, return the updated points
+[comment]: <> (**PATCH `/users?uid=1234567890&result=false`**)
 
-Example response body:
-```json
-{
-  "code": "000",
-  "msg": "success",
-  "data": 45
-}
-```
+[comment]: <> (Update user points after each testing finishes, return the updated points)
+
+[comment]: <> (Example response body:)
+
+[comment]: <> (```json)
+
+[comment]: <> ({)
+
+[comment]: <> (  "code": "000",)
+
+[comment]: <> (  "msg": "success",)
+
+[comment]: <> (  "data": 45)
+
+[comment]: <> (})
+
+[comment]: <> (```)
 
 ### Chatbot Stats
 #### Update Stats
@@ -99,10 +108,14 @@ Example response body:
 Update chatbot accuracy after user finish a test
 
 Example request body:
+
+[comment]: <> (修改请求参数，如果result是true，用户加分，chatbot减分。如果为false，用户减分，chatbot加分)
+
 ```json
 {
   "name": "dialogflow",
-  "result": "true"
+  "result": true,
+  "uid": "123456789"
 }
 ```
 
@@ -117,7 +130,7 @@ Example response body:
 
 #### Get Stats
 
-**POST `/chatbots/stats`**
+**GET `/chatbots/stats`**
 
 Retrieve chatbot stats ordered by accuracy from database
 
@@ -192,13 +205,13 @@ Example response body (matched):
 }
 ```
 
-#### ~~Start Dialogue~~ (Probably unnecessary)
+[comment]: <> (#### ~~Start Dialogue~~ &#40;Probably unnecessary&#41;)
 
-**POST `/dialogues`**
+[comment]: <> (**POST `/dialogues`**)
 
-Start a new dialogue
+[comment]: <> (Start a new dialogue)
 
-#### Continue Dialogue
+#### Chat with Chat Bot
 
 **PATCH `/dialogues`**
 
@@ -222,20 +235,29 @@ Example response body:
 }
 ```
 
-#### End Dialogue
+[comment]: <> (#### End Dialogue)
 
-**GET `/dialogues?uid=123456`**
+[comment]: <> (删掉不用了。直接用web socket onclose --> end dialogue，从redis离拿出来)
 
-End the current dialogue **(must call after a dialogue completes)**
+[comment]: <> (**GET `/dialogues?uid=123456`**)
 
-Example response body:
-```json
-{
-  "code": "000",
-  "msg": "success",
-  "data": true
-}
-```
+[comment]: <> (End the current dialogue **&#40;must call after a dialogue completes&#41;**)
+
+[comment]: <> (Example response body:)
+
+[comment]: <> (```json)
+
+[comment]: <> ({)
+
+[comment]: <> (  "code": "000",)
+
+[comment]: <> (  "msg": "success",)
+
+[comment]: <> (  "data": true)
+
+[comment]: <> (})
+
+[comment]: <> (```)
 
 ## Deployment (TBD)
 Hosting on Heroku/Firebase
