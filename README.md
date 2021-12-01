@@ -67,6 +67,23 @@ Example response body:
 }
 ```
 
+#### Update User Points
+
+**PATCH `/users?uid=1234567890&result=true`**
+
+**PATCH `/users?uid=1234567890&result=false`**
+
+Update user points after each testing finishes, return the updated points
+
+Example response body:
+```json
+{
+  "code": "000",
+  "msg": "success",
+  "data": 45
+}
+```
+
 ### Chatbot Stats
 #### Update Stats
 
