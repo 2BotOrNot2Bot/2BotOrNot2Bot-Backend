@@ -24,7 +24,7 @@ import java.util.concurrent.*;
 **/
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BackendEntryTest {
 
     @Autowired
