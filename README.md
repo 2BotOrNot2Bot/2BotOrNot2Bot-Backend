@@ -74,31 +74,6 @@ Example response body:
 }
 ```
 
-[comment]: <> (#### Update User Points)
-
-[comment]: <> (和update chatbot stats合并成一个, 留 /chatbots/stats)
-
-[comment]: <> (**PATCH `/users?uid=1234567890&result=true`**)
-
-[comment]: <> (**PATCH `/users?uid=1234567890&result=false`**)
-
-[comment]: <> (Update user points after each testing finishes, return the updated points)
-
-[comment]: <> (Example response body:)
-
-[comment]: <> (```json)
-
-[comment]: <> ({)
-
-[comment]: <> (  "code": "000",)
-
-[comment]: <> (  "msg": "success",)
-
-[comment]: <> (  "data": 45)
-
-[comment]: <> (})
-
-[comment]: <> (```)
 
 ### Chatbot Stats
 #### Update Stats
@@ -120,11 +95,12 @@ Example request body:
 ```
 
 Example response body:
+Return user's new score
 ```json
 {
   "code": "000",
   "msg": "success",
-  "data": "0.6666666667"
+  "data": "62"
 }
 ```
 
@@ -168,9 +144,16 @@ Clear stats of a chatbot **(use with caution)**
 ### Dialogue
 #### Start Search
 
-**POST `/dialogues/search?uid=123456`**
+**POST `/dialogues/search`**
 
 Start searching for opponents
+
+Example request body:
+```json
+{
+  "uid": "123456"
+}
+```
 
 Example response body:
 ```json
@@ -234,30 +217,6 @@ Example response body:
   "data": "Hi! I'm absolutely a human!"
 }
 ```
-
-[comment]: <> (#### End Dialogue)
-
-[comment]: <> (删掉不用了。直接用web socket onclose --> end dialogue，从redis离拿出来)
-
-[comment]: <> (**GET `/dialogues?uid=123456`**)
-
-[comment]: <> (End the current dialogue **&#40;must call after a dialogue completes&#41;**)
-
-[comment]: <> (Example response body:)
-
-[comment]: <> (```json)
-
-[comment]: <> ({)
-
-[comment]: <> (  "code": "000",)
-
-[comment]: <> (  "msg": "success",)
-
-[comment]: <> (  "data": true)
-
-[comment]: <> (})
-
-[comment]: <> (```)
 
 ## Deployment (TBD)
 Hosting on Heroku/Firebase
