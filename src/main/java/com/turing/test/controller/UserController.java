@@ -1,6 +1,7 @@
 package com.turing.test.controller;
 
 import com.turing.test.domain.User;
+import com.turing.test.domain.form.UserLoginForm;
 import com.turing.test.service.UserService;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
@@ -28,9 +29,9 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResultVo<String> addUser(@RequestBody String uid) throws InterruptedException, ExecutionException {
-        log.info("UserController->addUser: {}",uid);
-        return userService.addUser(uid);
+    public ResultVo<String> addUser(@RequestBody UserLoginForm form) throws InterruptedException, ExecutionException {
+        log.info("UserController->addUser: {}", form.getUid());
+        return userService.addUser(form.getUid());
     }
 
     @PatchMapping("/users")
