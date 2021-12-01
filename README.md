@@ -29,9 +29,16 @@ name `dialogflowServiceAccountKey.json`.
 ### User
 #### Sign Up
 
-**POST `/users?uid=1234567890`**
+**POST `/users`**
 
 Add user to database after signing up with Firebase
+
+Example request body:
+```json
+{
+  "uid": "1234567890"
+}
+```
 
 Example response body:
 ```json

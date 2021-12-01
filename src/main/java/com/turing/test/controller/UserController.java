@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResultVo<String> addUser(@RequestParam String uid) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(@RequestBody String uid) throws InterruptedException, ExecutionException {
         log.info("UserController->addUser: {}",uid);
         return userService.addUser(uid);
     }
