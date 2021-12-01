@@ -1,6 +1,7 @@
 package com.turing.test.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.turing.test.service.DialogueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,9 @@ public class WebSocket {
 
     private static Map<String,WebSocket> webSocketMap = new ConcurrentHashMap<>();
 
+    @Autowired
+    DialogueService dialogueService;
+
     @OnOpen
     public void openConnect(@PathParam("uid") String uid, @PathParam("chatterUid") String chatterUid, Session session) {
         this.uid = uid;
@@ -41,6 +45,7 @@ public class WebSocket {
     @OnClose
     public void closeConnect(@PathParam("uid") String uid, Session session) {
         webSocketMap.remove(uid);
+        dialogueService.endDialogue(uid);
         log.info("WebSocket->closeConnect: {} disconnected to server", uid);
     }
 
