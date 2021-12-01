@@ -150,7 +150,7 @@ Example response body:
 ```
 
 #### Delete Stats
-Clear stats of a chatbot (use with caution)
+Clear stats of a chatbot **(use with caution)**
 
 ### Dialogue
 #### Start Search

@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public interface UserService {
 
-    ResultVo<User> findUser(String firebaseUid) throws InterruptedException, ExecutionException;
+    ResultVo<Integer> findUser(String firebaseUid) throws InterruptedException, ExecutionException;
 
     ResultVo<String> addUser(String firebaseUid) throws InterruptedException, ExecutionException;
 
