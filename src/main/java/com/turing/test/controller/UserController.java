@@ -33,4 +33,10 @@ public class UserController {
         return userService.addUser(uid);
     }
 
+    @PatchMapping("/users")
+    public ResultVo<Integer> updateUser(@RequestParam String uid, @RequestParam Boolean result) throws ExecutionException, InterruptedException {
+        log.info("UserController->updateUser: {} answer {}",uid,result);
+        return userService.updateUserPoints(uid,result);
+    }
+
 }

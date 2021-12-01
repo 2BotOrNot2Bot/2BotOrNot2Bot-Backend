@@ -21,4 +21,5 @@ public interface DialogueService {
     ResultVo<String> getResponse(String input, String chatbot, String sessionId);
 
     ResultVo<Boolean> endDialogue(String uid);
+
 }

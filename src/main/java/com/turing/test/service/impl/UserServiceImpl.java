@@ -1,10 +1,7 @@
 package com.turing.test.service.impl;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.turing.test.domain.User;
 import com.turing.test.service.UserService;
@@ -41,7 +38,7 @@ public class UserServiceImpl implements UserService {
         //add user to firestore
         User user = new User();
         user.setUid(firebaseUid);
-        user.setPoints(0); //initial points is 0
+        user.setPoints(50); //initial points is 50
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(firebaseUid).set(user);
         log.info("UserServiceImpl->addUser: new user with uid {} added", firebaseUid);
         return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
@@ -61,5 +58,16 @@ public class UserServiceImpl implements UserService {
         }else {
             return ResultVo.error(BusinessError.UNKNOWN_USER);
         }
+    }
+
+    public ResultVo<Integer> updateUserPoints(String firebaseUid, Boolean answer) throws ExecutionException, InterruptedException {
+        log.info("UserServiceImpl->updateUserPoints: user {} got the answer {}",firebaseUid, answer? "right" : "wrong");
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        double score = answer ? 10.0 : -5.0;
+        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(firebaseUid);
+        documentReference.update("points", FieldValue.increment(score)).get();
+        score = documentReference.get().get().getDouble("points");
+        log.info("UserServiceImpl->updateUserPoints: User Point Updated to {}",score);
+        return ResultVo.success((int)score);
     }
 }
