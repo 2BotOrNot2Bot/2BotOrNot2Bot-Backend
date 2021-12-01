@@ -22,7 +22,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    public ResultVo<User> findUser(@RequestParam String uid) throws InterruptedException, ExecutionException{
+    public ResultVo<Integer> findUser(@RequestParam String uid) throws InterruptedException, ExecutionException{
         log.info("UserController->findUser: {}",uid);
         return userService.findUser(uid);
     }

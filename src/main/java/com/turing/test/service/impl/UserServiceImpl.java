@@ -44,20 +44,12 @@ public class UserServiceImpl implements UserService {
         return ResultVo.success(collectionsApiFuture.get().getUpdateTime().toString());
     }
 
-    public ResultVo<User> findUser(String firebaseUid) throws InterruptedException, ExecutionException {
+    public ResultVo<Integer> findUser(String firebaseUid) throws InterruptedException, ExecutionException {
         log.info("UserServiceImpl->findUser: finding user {}",firebaseUid);
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(firebaseUid);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-
-        DocumentSnapshot document = future.get();
-
-        if(document.exists()) {
-            User user = document.toObject(User.class);
-            return ResultVo.success(user);
-        }else {
-            return ResultVo.error(BusinessError.UNKNOWN_USER);
-        }
+        double score = documentReference.get().get().getDouble("points");
+        return ResultVo.success((int)score);
     }
 
     public ResultVo<Integer> updateUserPoints(String firebaseUid, Boolean answer) throws ExecutionException, InterruptedException {
