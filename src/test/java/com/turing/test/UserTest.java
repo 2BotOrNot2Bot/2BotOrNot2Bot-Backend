@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -34,7 +33,7 @@ class UserTest {
         Assertions.assertEquals(60, result1.getData());
         ResultVo<Integer> result2 = userService.updateUserPoints(uid,false);
         Assertions.assertEquals(55, result2.getData());
-        ResultVo<String> result3 = userService.deleteUser(uid);
+        ResultVo<String> result3 = userService.deleteUser(uid); // Avoid polluting the database
     }
 
 }

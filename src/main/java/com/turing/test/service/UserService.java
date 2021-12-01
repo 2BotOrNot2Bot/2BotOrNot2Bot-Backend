@@ -19,5 +19,7 @@ public interface UserService {
 
     ResultVo<Integer> updateUserPoints(String firebaseUid, Boolean answer) throws ExecutionException, InterruptedException;
 
+    // DO NOT USE
+    // USED SOLELY FOR TESTING
     ResultVo<String> deleteUser(String firebaseUid) throws ExecutionException, InterruptedException;
 }
