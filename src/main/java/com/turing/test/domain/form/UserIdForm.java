@@ -8,6 +8,6 @@ import lombok.Data;
  * Form for receiving request parameters containing user id
  **/
 @Data
-public class UserLoginForm {
+public class UserIdForm {
     private String uid;
 }

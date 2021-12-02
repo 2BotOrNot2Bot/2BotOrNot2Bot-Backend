@@ -37,12 +37,12 @@ public class ChatbotController {
         return futureResult.get();
     }
 
-    @GetMapping("chatbots/stats")
+    @GetMapping("/chatbots/stats")
     public ResultVo<List<Chatbot>> getChatbotStat() throws InterruptedException, ExecutionException {
         return chatbotService.getSortedChatbotStat();
     }
 
-    @DeleteMapping("chatbots/stats")
+    @DeleteMapping("/chatbots/stats")
     public ResultVo<String> clearChatbotStat(@RequestBody String name) throws ExecutionException, InterruptedException {
         return chatbotService.clearChatbotStat(name);
     }

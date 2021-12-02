@@ -1,9 +1,7 @@
 package com.turing.test.controller;
 
-import com.turing.test.domain.User;
-import com.turing.test.domain.form.UserLoginForm;
+import com.turing.test.domain.form.UserIdForm;
 import com.turing.test.service.UserService;
-import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResultVo<String> addUser(@RequestBody UserLoginForm form) throws InterruptedException, ExecutionException {
+    public ResultVo<String> addUser(@RequestBody UserIdForm form) throws InterruptedException, ExecutionException {
         log.info("UserController->addUser: {}", form.getUid());
         return userService.addUser(form.getUid());
     }
