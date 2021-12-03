@@ -28,13 +28,14 @@ public class ChatbotController {
     UserService userService;
 
     @PostMapping("/chatbots/stats")
-    public ResultVo<Double> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
+    public ResultVo<Integer> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
         if(!chatbotMap.containsKey("name") || !chatbotMap.containsKey("result") || !chatbotMap.containsKey("uid"))
             return ResultVo.error(BusinessError.INVALID_PARAM);
         CompletableFuture<ResultVo<Double>> futureResult = chatbotService.updateChatbotStat
                 (chatbotMap.get("name"),!Boolean.parseBoolean(chatbotMap.get("result")));
-        userService.updateUserPoints(chatbotMap.get("uid"),Boolean.parseBoolean(chatbotMap.get("result")));
-        return futureResult.get();
+        // Does nothing if uid is null
+        return userService.updateUserPoints(chatbotMap.get("uid"),Boolean.parseBoolean(chatbotMap.get("result")));
+        // return futureResult.get();
     }
 
     @GetMapping("/chatbots/stats")

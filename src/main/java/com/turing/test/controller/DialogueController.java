@@ -2,9 +2,11 @@ package com.turing.test.controller;
 
 import com.turing.test.domain.form.UserIdForm;
 import com.turing.test.service.DialogueService;
+import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,6 +21,9 @@ public class DialogueController {
 
     @Autowired
     DialogueService dialogueService;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @PostMapping("/dialogues/search")
     public ResultVo<Boolean> startSearch(@RequestBody UserIdForm form) {
@@ -46,5 +51,8 @@ public class DialogueController {
     public ResultVo<Boolean> endDialogue(@RequestParam String uid) {
         return dialogueService.endDialogue(uid);
     }
+
+    @DeleteMapping("/cache")
+    public ResultVo<Boolean> clearCache() { return ResultVo.success(redisUtils.clearAll()); }
 
 }

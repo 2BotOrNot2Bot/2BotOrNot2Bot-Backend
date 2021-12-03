@@ -10,6 +10,7 @@ import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 import java.util.Objects;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
 
     public ResultVo<Integer> updateUserPoints(String firebaseUid, Boolean answer) throws ExecutionException, InterruptedException {
         log.info("UserServiceImpl->updateUserPoints: user {} got the answer {}",firebaseUid, answer? "right" : "wrong");
+        if(firebaseUid==null || firebaseUid.isEmpty()) return ResultVo.success(null);
         Firestore dbFirestore = FirestoreClient.getFirestore();
         double score = answer ? 10.0 : -5.0;
         DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(firebaseUid);
