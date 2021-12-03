@@ -2,6 +2,7 @@ package com.turing.test.controller;
 
 import com.turing.test.domain.Chatbot;
 import com.turing.test.service.ChatbotService;
+import com.turing.test.service.UserService;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +24,26 @@ public class ChatbotController {
     @Autowired
     ChatbotService chatbotService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/chatbots/stats")
-    public ResultVo<Double> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
-        if(!chatbotMap.containsKey("name") || !chatbotMap.containsKey("result"))
+    public ResultVo<Integer> updateChatbotStat(@RequestBody Map<String,String> chatbotMap) throws InterruptedException, ExecutionException {
+        if(!chatbotMap.containsKey("name") || !chatbotMap.containsKey("result") || !chatbotMap.containsKey("uid"))
             return ResultVo.error(BusinessError.INVALID_PARAM);
         CompletableFuture<ResultVo<Double>> futureResult = chatbotService.updateChatbotStat
-                (chatbotMap.get("name"),Boolean.valueOf(chatbotMap.get("result")));
-        return futureResult.get();
+                (chatbotMap.get("name"),!Boolean.parseBoolean(chatbotMap.get("result")));
+        // Does nothing if uid is null
+        return userService.updateUserPoints(chatbotMap.get("uid"),Boolean.parseBoolean(chatbotMap.get("result")));
+        // return futureResult.get();
     }
 
-    @GetMapping("chatbots/stats")
+    @GetMapping("/chatbots/stats")
     public ResultVo<List<Chatbot>> getChatbotStat() throws InterruptedException, ExecutionException {
         return chatbotService.getSortedChatbotStat();
     }
 
-    @DeleteMapping("chatbots/stats")
+    @DeleteMapping("/chatbots/stats")
     public ResultVo<String> clearChatbotStat(@RequestBody String name) throws ExecutionException, InterruptedException {
         return chatbotService.clearChatbotStat(name);
     }

@@ -115,4 +115,12 @@ public class RedisUtils {
         }
     }
 
+    public Boolean clearAll() {
+        redisTemplate.delete(RedisKey.CHATTING_STATUS.getKey());
+        redisTemplate.delete(RedisKey.WAITING_QUEUE.getKey());
+        redisTemplate.delete("LOCK_"+RedisKey.CHATTING_STATUS.getKey());
+        redisTemplate.delete("LOCK_"+RedisKey.WAITING_QUEUE.getKey());
+        return true;
+    }
+
 }

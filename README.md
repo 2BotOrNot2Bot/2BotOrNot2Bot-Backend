@@ -18,14 +18,27 @@ It achieves the stable matching mechanism with [Redis](https://redis.io/).
 ## Configuration
 Please download the file from Firebase console and put it under the resource folder with name `serviceAccountKey.json`.
 
+Please set relevant Redis configuration, name of dialogflow project id as `DIALOGFLOW_PROJECT_ID` and put it under the 
+resource folder with name `application.properties`.
+
+Please download the file from GCP console of your Dialogflow project and put it under the resource folder with 
+name `dialogflowServiceAccountKey.json`.
+
 ## Endpoints
 
 ### User
 #### Sign Up
 
-**POST `/users?uid=1234567890`**
+**POST `/users`**
 
 Add user to database after signing up with Firebase
+
+Example request body:
+```json
+{
+  "uid": "1234567890"
+}
+```
 
 Example response body:
 ```json
@@ -36,7 +49,7 @@ Example response body:
 }
 ```
 
-#### Sign Up
+#### Find User - Login
 
 **GET `/users?uid=1234567890`**
 
@@ -61,33 +74,37 @@ Example response body:
 }
 ```
 
+
 ### Chatbot Stats
 #### Update Stats
 
 **POST `/chatbots/stats`**
 
-Update chatbot accuracy after user finish a test
+Update chatbot accuracy and personal score after user submit test answers
 
 Example request body:
+
 ```json
 {
   "name": "dialogflow",
-  "result": "true"
+  "result": true,
+  "uid": "123456789"
 }
 ```
 
 Example response body:
+Return user's new score
 ```json
 {
   "code": "000",
   "msg": "success",
-  "data": "0.6666666667"
+  "data": "62"
 }
 ```
 
 #### Get Stats
 
-**POST `/chatbots/stats`**
+**GET `/chatbots/stats`**
 
 Retrieve chatbot stats ordered by accuracy from database
 
@@ -120,14 +137,21 @@ Example response body:
 ```
 
 #### Delete Stats
-Clear stats of a chatbot (use with caution)
+Clear stats of a chatbot **(use with caution)**
 
 ### Dialogue
 #### Start Search
 
-**POST `/dialogues/search?uid=123456`**
+**POST `/dialogues/search`**
 
 Start searching for opponents
+
+Example request body:
+```json
+{
+  "uid": "123456"
+}
+```
 
 Example response body:
 ```json
@@ -162,13 +186,13 @@ Example response body (matched):
 }
 ```
 
-#### ~~Start Dialogue~~ (Probably unnecessary)
+[comment]: <> (#### ~~Start Dialogue~~ &#40;Probably unnecessary&#41;)
 
-**POST `/dialogues`**
+[comment]: <> (**POST `/dialogues`**)
 
-Start a new dialogue
+[comment]: <> (Start a new dialogue)
 
-#### Continue Dialogue
+#### Chat with Chat Bot
 
 **PATCH `/dialogues`**
 
@@ -189,21 +213,6 @@ Example response body:
   "code": "000",
   "msg": "success",
   "data": "Hi! I'm absolutely a human!"
-}
-```
-
-#### End Dialogue
-
-**GET `/dialogues?uid=123456`**
-
-End the current dialogue **(must call after a dialogue completes)**
-
-Example response body:
-```json
-{
-  "code": "000",
-  "msg": "success",
-  "data": true
 }
 ```
 

@@ -1,10 +1,7 @@
 package com.turing.test;
 
-import com.turing.test.domain.Chatbot;
-import com.turing.test.domain.User;
-import com.turing.test.service.ChatbotService;
 import com.turing.test.service.DialogueService;
-import com.turing.test.service.UserService;
+import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -12,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
 * @Author Yibo Wen
@@ -24,11 +21,18 @@ import java.util.concurrent.ExecutionException;
 **/
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RedisTest {
 
     @Autowired
     DialogueService dialogueService;
+
+    @Autowired
+    RedisUtils redisUtils;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
 
     @Test
     void startSearch() throws InterruptedException {
@@ -50,6 +54,18 @@ class RedisTest {
         ResultVo<String> response = dialogueService.getResponse("Hello","dialogflow", "123edf");
         Assertions.assertEquals("success",response.getMsg());
         log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
+    }
+
+    @Test
+    void checkClearCache() throws IOException {
+        dialogueService.startSearch("123456");
+        dialogueService.startSearch("888888");
+        Assertions.assertNotEquals(0,redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes()).size());
+        dialogueService.findOpponent("888888");
+        dialogueService.findOpponent("123456");
+        Assertions.assertNotEquals(0,redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes()).size());
+        redisUtils.clearAll();
+        Assertions.assertEquals(0,redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes()).size());
     }
 
 }

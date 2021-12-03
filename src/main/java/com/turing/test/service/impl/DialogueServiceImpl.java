@@ -11,7 +11,6 @@ import com.turing.test.domain.enums.Chatbots;
 import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
 import com.turing.test.service.util.RedisKey;
-import com.turing.test.service.util.RedisLock;
 import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
