@@ -80,11 +80,9 @@ Example response body:
 
 **POST `/chatbots/stats`**
 
-Update chatbot accuracy after user finish a test
+Update chatbot accuracy and personal score after user submit test answers
 
 Example request body:
-
-[comment]: <> (修改请求参数，如果result是true，用户加分，chatbot减分。如果为false，用户减分，chatbot加分)
 
 ```json
 {
