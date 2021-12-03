@@ -24,6 +24,8 @@ resource folder with name `application.properties`.
 Please download the file from GCP console of your Dialogflow project and put it under the resource folder with 
 name `dialogflowServiceAccountKey.json`.
 
+Please reserve port 8080 for backend.
+
 ## Endpoints
 
 ### User
@@ -93,7 +95,7 @@ Example request body:
 ```
 
 Example response body:
-Return user's new score
+Return user's new score if the input uid is not null
 ```json
 {
   "code": "000",
@@ -177,12 +179,16 @@ Example response body (no matching):
 }
 ```
 
-Example response body (matched): return opponent's user id
+Example response body (matched): return opponent's user id and name of the chat bot
+
 ```json
 {
   "code": "000",
   "msg": "success",
-  "data": "888888"
+  "data": {
+    "first": "88888888",
+    "second": "dialogflow"
+  }
 }
 ```
 
@@ -196,9 +202,9 @@ Example response body (matched): return opponent's user id
 
 **PATCH `/dialogues`**
 
-Get response from an ongoing dialogue
+Get response from chat bot based on a unique id
 
-Example request body **(Dialogflow)**:
+Example request body:
 ```json
 {
   "input": "Hello!",
