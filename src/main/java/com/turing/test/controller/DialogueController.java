@@ -7,6 +7,7 @@ import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class DialogueController {
     }
 
     @GetMapping("/dialogues/search")
-    public ResultVo<String> getOpponent(@RequestParam String uid) {
+    public ResultVo<Pair<String,String>> getOpponent(@RequestParam String uid) {
         return dialogueService.findOpponent(uid);
     }
 

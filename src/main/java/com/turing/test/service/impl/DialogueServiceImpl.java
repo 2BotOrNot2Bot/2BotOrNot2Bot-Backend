@@ -3,6 +3,7 @@ package com.turing.test.service.impl;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2.DetectIntentResponse;
 import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
@@ -17,9 +18,14 @@ import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 
 /**
 * @Author Yuxing Zhou
@@ -45,7 +51,7 @@ public class DialogueServiceImpl implements DialogueService {
     }
 
     @Override
-    public ResultVo<String> findOpponent(String uid) {
+    public ResultVo<Pair<String,String>> findOpponent(String uid) {
         String waiting_key = RedisKey.WAITING_QUEUE.getKey();
         String chatting_key = RedisKey.CHATTING_STATUS.getKey();
         // Still in Waiting Queue
@@ -61,7 +67,7 @@ public class DialogueServiceImpl implements DialogueService {
             redisUtils.updateToHash(chatting_key,uid,opponent);
             redisUtils.updateToHash(chatting_key,opponent,uid);
             log.info("DialogueServiceImpl->findOpponent: Updated chatting status");
-            return ResultVo.success(opponent);
+            return ResultVo.success(Pair.of(opponent,Chatbots.getRandomName()));
         }
         // Already removed from Waiting Queue by an opponent
         else {
@@ -71,7 +77,7 @@ public class DialogueServiceImpl implements DialogueService {
                 return ResultVo.error(BusinessError.UNKNOWN_ERROR);
             }
             log.info("DialogueServiceImpl->findOpponent: Found opponent {}",opponent);
-            return ResultVo.success(opponent);
+            return ResultVo.success(Pair.of(opponent,Chatbots.getRandomName()));
         }
     }
 

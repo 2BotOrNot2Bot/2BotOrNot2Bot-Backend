@@ -1,6 +1,7 @@
 package com.turing.test.service;
 
 import com.turing.test.vo.ResultVo;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public interface DialogueService {
 
     ResultVo<Boolean> startSearch(String uid);
 
-    ResultVo<String> findOpponent(String uid);
+    ResultVo<Pair<String,String>> findOpponent(String uid);
 
     ResultVo<Long> startDialogue(String chatbot);
 
