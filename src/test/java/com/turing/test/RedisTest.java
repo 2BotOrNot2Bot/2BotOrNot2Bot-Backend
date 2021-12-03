@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -37,13 +38,13 @@ class RedisTest {
     @Test
     void startSearch() throws InterruptedException {
         dialogueService.startSearch("123456");
-        ResultVo<String> result = dialogueService.findOpponent("123456");
+        ResultVo<Pair<String,String>> result = dialogueService.findOpponent("123456");
         Assertions.assertNull(result.getData());
         dialogueService.startSearch("888888");
-        ResultVo<String> result1 = dialogueService.findOpponent("888888");
-        Assertions.assertEquals("123456",result1.getData());
-        ResultVo<String> result2 = dialogueService.findOpponent("123456");
-        Assertions.assertEquals("888888",result2.getData());
+        ResultVo<Pair<String,String>> result1 = dialogueService.findOpponent("888888");
+        Assertions.assertEquals("123456",result1.getData().getFirst());
+        ResultVo<Pair<String,String>> result2 = dialogueService.findOpponent("123456");
+        Assertions.assertEquals("888888",result2.getData().getFirst());
         Thread.sleep(1000L);
         dialogueService.endDialogue("123456");
         dialogueService.endDialogue("888888");

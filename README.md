@@ -177,7 +177,7 @@ Example response body (no matching):
 }
 ```
 
-Example response body (matched):
+Example response body (matched): return opponent's user id
 ```json
 {
   "code": "000",

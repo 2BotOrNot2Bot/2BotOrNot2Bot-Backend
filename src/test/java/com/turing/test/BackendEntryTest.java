@@ -38,7 +38,7 @@ class BackendEntryTest {
 
     @Test
     void findUser() throws ExecutionException, InterruptedException {
-        ResultVo<Integer> user = userService.findUser("shawn@usc.edu");
+        ResultVo<Integer> user = userService.findUser("bJ1vXhCSr5aFnzJeonB2eGResqv1");
         Assertions.assertEquals("success",user.getMsg());
     }
 
