@@ -56,6 +56,7 @@ Example response body:
 **GET `/users?uid=1234567890`**
 
 Retrieve user from database after signing in with Firebase
+Return user id and user's points if the user is found
 
 Example response body:
 ```json
@@ -84,7 +85,8 @@ Example response body:
 
 Update chatbot accuracy and personal score after user submit test answers
 
-Example request body:
+Example request body: 
+Contains name of the chatbot, user's guessing result, and user id(null if it's a guest user)
 
 ```json
 {
@@ -95,7 +97,7 @@ Example request body:
 ```
 
 Example response body:
-Return user's new score if the input uid is not null
+Return user's new score if the input uid is not null (i.e.an authorized user)
 ```json
 {
   "code": "000",
@@ -149,6 +151,8 @@ Clear stats of a chatbot **(use with caution)**
 Start searching for opponents
 
 Example request body:
+uid will be null if it's a guest user
+
 ```json
 {
   "uid": "123456"
@@ -156,11 +160,13 @@ Example request body:
 ```
 
 Example response body:
+If it's a guest user, return a randomly generated user id for the guest user to initialize websocket for chatting
+
 ```json
 {
   "code": "000",
   "msg": "success",
-  "data": true
+  "data": "12345678"
 }
 ```
 
@@ -179,7 +185,7 @@ Example response body (no matching):
 }
 ```
 
-Example response body (matched): return opponent's user id and name of the chat bot
+Example response body (matched): return opponent's user id and name of the chatbot
 
 ```json
 {
@@ -192,24 +198,18 @@ Example response body (matched): return opponent's user id and name of the chat 
 }
 ```
 
-[comment]: <> (#### ~~Start Dialogue~~ &#40;Probably unnecessary&#41;)
-
-[comment]: <> (**POST `/dialogues`**)
-
-[comment]: <> (Start a new dialogue)
-
 #### Chat with Chat Bot
 
 **PATCH `/dialogues`**
 
-Get response from chat bot based on a unique id
+Get response from chat bot based on user id
 
 Example request body:
 ```json
 {
   "input": "Hello!",
   "chatbot": "dialogflow",
-  "session": "1234567"
+  "uid": "1234567"
 }
 ```
 
