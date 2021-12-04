@@ -1,45 +1,36 @@
 package com.turing.test.service.impl;
 
-import com.google.api.client.json.Json;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.Tuple;
-import com.google.cloud.dialogflow.v2.DetectIntentResponse;
-import com.google.cloud.dialogflow.v2.QueryInput;
-import com.google.cloud.dialogflow.v2.SessionName;
-import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.cloud.dialogflow.v2.*;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.enums.Chatbots;
-import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
 import com.turing.test.service.util.RedisKey;
 import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.UUID;
 
 /**
-* @Author Yibo Wen, Yuxing Zhou
+* @Author Yibo Wen, Yuxing Zhou, Furong Jia, Tianyi Yan
 * @Date 10/28/2021 3:43 PM
 **/
 @Slf4j
@@ -119,6 +110,7 @@ public class DialogueServiceImpl implements DialogueService {
 
     @Override
     public ResultVo<String> getResponse(String input, String chatbot, String sessionId) {
+        log.info("chatbot:",chatbot);
         // DialogFlow API
         if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
             // Instantiates a client
@@ -154,6 +146,7 @@ public class DialogueServiceImpl implements DialogueService {
                         .asString();
                 String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString();
                 message = message.substring(1,message.length()-1);
+                message  = StringEscapeUtils.unescapeJava(message);
                 log.info("message: ", message);
                 return ResultVo.success(message);
 //                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
@@ -177,7 +170,10 @@ public class DialogueServiceImpl implements DialogueService {
                         .body(String.format("in=%s&op=in&cbot=1&SessionID=%s&ChatSource=RapidAPI&cbid=1&key=RHMN5hnQ4wTYZBGCF3dfxzypt68rVP", msg2Bot,sessionId))
                         .asString();
                 log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("out").toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("out").toString();
+                message = message.substring(1,message.length()-1);
+                message  = StringEscapeUtils.unescapeJava(message);
+                return ResultVo.success(message);
             } catch (UnirestException e) {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
@@ -200,7 +196,10 @@ public class DialogueServiceImpl implements DialogueService {
                         .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
                         .asString();
                 log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().getAsJsonObject("chatbot").get("response").toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().getAsJsonObject("chatbot").get("response").toString();
+                message = message.substring(1,message.length()-1);
+                message = StringEscapeUtils.unescapeJava(message);
+                return ResultVo.success(message);
             } catch (UnirestException e) {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");

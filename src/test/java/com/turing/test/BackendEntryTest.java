@@ -112,6 +112,7 @@ class BackendEntryTest {
                     .asString();
             String message = JsonParser.parseString(response.getBody()).getAsJsonObject().toString();
             message = message.substring(2,message.length()-2);
+            message = message.replace("\"", "'");
             log.info(message);
         } catch (UnirestException e) {
             e.printStackTrace();
