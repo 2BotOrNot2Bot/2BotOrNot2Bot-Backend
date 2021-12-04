@@ -10,12 +10,11 @@ import lombok.AllArgsConstructor;
 public enum Chatbots {
 
     DIALOGFLOW("dialogflow"),
-    PANDORA_BOTS("pandorabots"),
-    HARLEY("harley"),
+//    PANDORA_BOTS("pandorabots"),
+//    HARLEY("harley"),
     BRAINSHOP("brainshop"),
     AICHATBOT("aichatbot"),
-    ROBOMATIC("robomatic"),
-    RASA("rasa");
+    ROBOMATIC("robomatic");
 
     private final String name;
 
