@@ -13,5 +13,5 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
-##credential
-/src/main/resources/
+
+src/main/.DS_Store
