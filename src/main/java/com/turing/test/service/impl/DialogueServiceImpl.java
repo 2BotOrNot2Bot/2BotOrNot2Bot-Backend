@@ -1,5 +1,6 @@
 package com.turing.test.service.impl;
 
+import com.google.api.client.json.Json;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -10,6 +11,7 @@ import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.enums.Chatbots;
@@ -20,8 +22,12 @@ import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.util.Pair;
@@ -135,6 +141,30 @@ public class DialogueServiceImpl implements DialogueService {
                 e.printStackTrace();
             }
         } else if(Chatbots.HARLEY.getName().equals(chatbot)){
+            try{
+                HttpResponse<String> response = Unirest.post("https://harley-the-chatbot.p.rapidapi.com/talk/bot")
+                        .header("content-type", "application/json")
+                        .header("accept", "application/json")
+                        .header("x-rapidapi-host", "harley-the-chatbot.p.rapidapi.com")
+                        // Note that this key is different from that for BrainShop
+                        .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
+//                        .body("{\"client\": \"\",\"bot\": \"harley\",\"message\": \"Hello\"}")
+                        .body(String.format("{\"client\": \"\",\"bot\": \"harley\",\"message\": \"%s\"}",input))
+                        .asString();
+                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                return ResultVo.success(String.format("{\"client\": \"\",\"bot\": \"harley\",\"message\": \"%s\"}",input));
+//                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().getAsJsonObject("conversation").get("output").toString());
+            } catch(UnirestException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Unirest Exception.");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            }
+
             // Haven't implemented yet
         } else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
             try {
@@ -142,11 +172,11 @@ public class DialogueServiceImpl implements DialogueService {
                         .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
                         .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
                         .asString();
-//                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
                 return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
             } catch (UnirestException e) {
                 e.printStackTrace();
-                return ResultVo.error(BusinessError.INVALID_PARAM);
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
             }
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");

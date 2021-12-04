@@ -14,6 +14,7 @@ public enum BusinessError {
     UNKNOWN_USER("003","didn't find the user"),
     DUPLICATE_USER("004","the user email already exists"),
     FALLBACK_INTENT("005","chatbot failed to comprehend"),
+    INTERNAL_ERROR("006", "chatbot API failure"),
     UNKNOWN_ERROR("999","please take a screenshot of the error and send it to yibowen@usc.edu");
 
     private final String code;

@@ -13,6 +13,7 @@ public enum Chatbots {
     PANDORA_BOTS("pandorabots"),
     HARLEY("harley"),
     BRAINSHOP("brainshop"),
+    AICHATBOT("aichatbot"),
     RASA("rasa");
 
     private final String name;
