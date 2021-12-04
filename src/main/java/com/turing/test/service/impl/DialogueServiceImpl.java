@@ -8,6 +8,10 @@ import com.google.cloud.dialogflow.v2.DetectIntentResponse;
 import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.gson.JsonParser;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.enums.Chatbots;
 import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
@@ -16,6 +20,8 @@ import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.util.Pair;
@@ -127,6 +133,18 @@ public class DialogueServiceImpl implements DialogueService {
             } catch (IOException e) {
                 log.info("DialogueServiceImpl->getResponse: IOException");
                 e.printStackTrace();
+            }
+        } else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
+            try {
+                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input)
+                        .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
+                        .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
+                        .asString();
+//                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
+            } catch (UnirestException e) {
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INVALID_PARAM);
             }
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
