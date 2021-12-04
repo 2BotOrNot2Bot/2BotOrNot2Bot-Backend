@@ -6,6 +6,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.Chatbot;
+import com.turing.test.domain.enums.Chatbots;
 import com.turing.test.service.ChatbotService;
 import com.turing.test.service.DialogueService;
 import com.turing.test.service.UserService;
@@ -113,5 +114,10 @@ class BackendEntryTest {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void resetChatbots() throws ExecutionException, InterruptedException {
+        Assertions.assertEquals(Chatbots.values().length,chatbotService.resetChatbots().getData());
     }
 }
