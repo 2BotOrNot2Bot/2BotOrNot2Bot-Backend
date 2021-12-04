@@ -12,6 +12,7 @@ public enum Chatbots {
     DIALOGFLOW("dialogflow"),
     PANDORA_BOTS("pandorabots"),
     HARLEY("harley"),
+    BRAINSHOP("brainshop"),
     RASA("rasa");
 
     private final String name;
