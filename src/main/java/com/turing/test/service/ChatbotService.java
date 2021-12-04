@@ -23,4 +23,5 @@ public interface ChatbotService {
 
     ResultVo<String> clearChatbotStat(String name) throws ExecutionException, InterruptedException;
 
+    ResultVo<Integer> resetChatbots() throws ExecutionException, InterruptedException;
 }
