@@ -102,16 +102,8 @@ class BackendEntryTest {
         log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
     }
 
-    @Test
-    void haha () {
-        try {
-            HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg=Hello!")
-                    .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
-                    .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
-                    .asString();
-            log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
+
 }
