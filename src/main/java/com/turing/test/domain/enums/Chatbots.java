@@ -22,7 +22,7 @@ public enum Chatbots {
     }
 
     public static String getRandomName() {
-        return values()[(int)(Math.random() * Chatbots.values().length)].name;
+        return values()[(int)(Math.random() * Chatbots.values().length)].getName();
     }
 
 }
