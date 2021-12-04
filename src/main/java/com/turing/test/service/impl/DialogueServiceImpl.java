@@ -34,6 +34,8 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -139,8 +141,14 @@ public class DialogueServiceImpl implements DialogueService {
             } catch (IOException e) {
                 log.info("DialogueServiceImpl->getResponse: IOException");
                 e.printStackTrace();
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing Dialogflow response failed. NULL pointer");
             }
         } else if(Chatbots.HARLEY.getName().equals(chatbot)){
+            /* The code for Harley is fine, but the service itself until now is not available.
+            * This will not break the code but will send an error back.
+            * Consider commenting this out upon production*/
             try{
                 HttpResponse<String> response = Unirest.post("https://harley-the-chatbot.p.rapidapi.com/talk/bot")
                         .header("content-type", "application/json")
@@ -177,6 +185,36 @@ public class DialogueServiceImpl implements DialogueService {
             } catch (UnirestException e) {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            }
+        } else if(Chatbots.ROBOMATIC.getName().equals(chatbot)){
+            try{
+                String msg2Bot = URLEncoder.encode(input, StandardCharsets.UTF_8.toString());
+                HttpResponse<String> response = Unirest.post("https://robomatic-ai.p.rapidapi.com/api.php")
+                        .header("content-type", "application/x-www-form-urlencoded")
+                        .header("x-rapidapi-host", "robomatic-ai.p.rapidapi.com")
+                        .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
+                        .body(String.format("in=%s&op=in&cbot=1&SessionID=%s&ChatSource=RapidAPI&cbid=1&key=RHMN5hnQ4wTYZBGCF3dfxzypt68rVP", input,sessionId))
+                        .asString();
+                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("out").toString());
+            }catch (UnirestException e) {
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            } catch(UnsupportedEncodingException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Error converting input message to URLencoding.");
             }
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");

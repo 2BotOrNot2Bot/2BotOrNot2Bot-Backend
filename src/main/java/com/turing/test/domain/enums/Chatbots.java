@@ -14,6 +14,7 @@ public enum Chatbots {
     HARLEY("harley"),
     BRAINSHOP("brainshop"),
     AICHATBOT("aichatbot"),
+    ROBOMATIC("robomatic"),
     RASA("rasa");
 
     private final String name;
