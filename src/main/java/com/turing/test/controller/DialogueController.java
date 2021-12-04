@@ -27,7 +27,7 @@ public class DialogueController {
     RedisUtils redisUtils;
 
     @PostMapping("/dialogues/search")
-    public ResultVo<Boolean> startSearch(@RequestBody UserIdForm form) {
+    public ResultVo<String> startSearch(@RequestBody UserIdForm form) {
         return dialogueService.startSearch(form.getUid());
     }
 

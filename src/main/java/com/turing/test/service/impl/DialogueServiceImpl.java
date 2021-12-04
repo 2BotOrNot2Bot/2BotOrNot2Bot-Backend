@@ -22,10 +22,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
 * @Author Yuxing Zhou
@@ -42,12 +39,16 @@ public class DialogueServiceImpl implements DialogueService {
     private RedisUtils redisUtils;
 
     @Override
-    public ResultVo<Boolean> startSearch(String uid) {
+    public ResultVo<String> startSearch(String uid) {
+        if(uid==null||uid.isEmpty()) {
+            uid= UUID.randomUUID().toString();
+            log.info("DialogueServiceImpl->startSearch: Guest user {} started search",uid);
+        }
         String key = RedisKey.WAITING_QUEUE.getKey();
         // Add to waiting queue in Redis, lock acquired and released
         Boolean result = redisUtils.addToSet(key,uid);
         log.info("DialogueServiceImpl->startSearch: Added {} to queue",uid);
-        return result ? ResultVo.success(Boolean.TRUE) : ResultVo.error(BusinessError.UNKNOWN_ERROR);
+        return result ? ResultVo.success(uid) : ResultVo.error(BusinessError.UNKNOWN_ERROR);
     }
 
     @Override

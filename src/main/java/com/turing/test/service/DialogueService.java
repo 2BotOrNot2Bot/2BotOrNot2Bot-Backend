@@ -13,7 +13,7 @@ import java.io.IOException;
 @Service
 public interface DialogueService {
 
-    ResultVo<Boolean> startSearch(String uid);
+    ResultVo<String> startSearch(String uid);
 
     ResultVo<Pair<String,String>> findOpponent(String uid);
 
