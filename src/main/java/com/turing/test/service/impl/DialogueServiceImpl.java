@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 
 /**
-* @Author Yuxing Zhou
+* @Author Yibo Wen, Yuxing Zhou
 * @Date 10/28/2021 3:43 PM
 **/
 @Slf4j
@@ -128,6 +128,8 @@ public class DialogueServiceImpl implements DialogueService {
                 log.info("DialogueServiceImpl->getResponse: IOException");
                 e.printStackTrace();
             }
+        } else if(Chatbots.HARLEY.getName().equals(chatbot)){
+            // Haven't implemented yet
         }
         log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
         return ResultVo.error(BusinessError.INVALID_PARAM);
