@@ -145,42 +145,18 @@ public class DialogueServiceImpl implements DialogueService {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing Dialogflow response failed. NULL pointer");
             }
-//        } else if(Chatbots.HARLEY.getName().equals(chatbot)){
-//            /* The code for Harley is fine, but the service itself until now is not available.
-//            * This will not break the code but will send an error back.
-//            * Consider commenting this out upon production*/
-//            try{
-//                HttpResponse<String> response = Unirest.post("https://harley-the-chatbot.p.rapidapi.com/talk/bot")
-//                        .header("content-type", "application/json")
-//                        .header("accept", "application/json")
-//                        .header("x-rapidapi-host", "harley-the-chatbot.p.rapidapi.com")
-//                        // Note that this key is different from that for BrainShop
-//                        .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
-//                        .body("{\"client\": \"some client\",\"bot\": \"harley\",\"message\": \"Hello\"}")
-////                        .body(String.format("{\"client\": \"\",\"bot\": \"harley\",\"message\": \"%s\"}",input))
-//                        .asString();
-//                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-////                return ResultVo.success(String.format("{\"client\": \"\",\"bot\": \"harley\",\"message\": \"%s\"}",input));
-//                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-////                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().getAsJsonObject("conversation").get("output").toString());
-//            } catch(UnirestException e){
-//                e.printStackTrace();
-//                return ResultVo.error(BusinessError.INVALID_PARAM, "Unirest Exception.");
-//            } catch(JSONException e){
-//                e.printStackTrace();
-//                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
-//            } catch (NullPointerException e){
-//                e.printStackTrace();
-//                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
-//            }
         } else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
             try {
-                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input)
+                String input_string = input.replace(" ","%20");
+                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input_string)
                         .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
                         .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
                         .asString();
-                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString();
+                message = message.substring(1,message.length()-1);
+                log.info("message: ", message);
+                return ResultVo.success(message);
+//                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
             } catch (UnirestException e) {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
@@ -239,7 +215,7 @@ public class DialogueServiceImpl implements DialogueService {
                 return ResultVo.error(BusinessError.INTERNAL_ERROR, "Error converting input message to URLencoding.");
             }
         }
-        log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
+        log.warn("DialogueServiceImpl->getResponse: no such chatbot found: " + chatbot);
         return ResultVo.error(BusinessError.INVALID_PARAM);
     }
 
