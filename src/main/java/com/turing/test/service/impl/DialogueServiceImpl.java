@@ -3,35 +3,34 @@ package com.turing.test.service.impl;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.Tuple;
-import com.google.cloud.dialogflow.v2.DetectIntentResponse;
-import com.google.cloud.dialogflow.v2.QueryInput;
-import com.google.cloud.dialogflow.v2.SessionName;
-import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.cloud.dialogflow.v2.*;
 import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.enums.Chatbots;
-import com.google.cloud.dialogflow.v2.*;
 import com.turing.test.service.DialogueService;
 import com.turing.test.service.util.RedisKey;
 import com.turing.test.service.util.RedisUtils;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.connector.Response;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /**
-* @Author Yuxing Zhou
+* @Author Yibo Wen, Yuxing Zhou, Furong Jia, Tianyi Yan
 * @Date 10/28/2021 3:43 PM
 **/
 @Slf4j
@@ -111,6 +110,7 @@ public class DialogueServiceImpl implements DialogueService {
 
     @Override
     public ResultVo<String> getResponse(String input, String chatbot, String sessionId) {
+        log.info("chatbot:",chatbot);
         // DialogFlow API
         if(Chatbots.DIALOGFLOW.getName().equals(chatbot)){
             // Instantiates a client
@@ -133,21 +133,88 @@ public class DialogueServiceImpl implements DialogueService {
             } catch (IOException e) {
                 log.info("DialogueServiceImpl->getResponse: IOException");
                 e.printStackTrace();
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing Dialogflow response failed. NULL pointer");
             }
         } else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
             try {
-                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input)
+                String input_string = input.replace(" ","%20");
+                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input_string)
                         .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
                         .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
                         .asString();
-//                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString();
+                message = message.substring(1,message.length()-1);
+                message  = StringEscapeUtils.unescapeJava(message);
+                log.info("message: ", message);
+                return ResultVo.success(message);
+//                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
             } catch (UnirestException e) {
                 e.printStackTrace();
-                return ResultVo.error(BusinessError.INVALID_PARAM);
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            }
+        } else if(Chatbots.ROBOMATIC.getName().equals(chatbot)){
+            try{
+                String msg2Bot = URLEncoder.encode(input, StandardCharsets.UTF_8.toString());
+                HttpResponse<String> response = Unirest.post("https://robomatic-ai.p.rapidapi.com/api.php")
+                        .header("content-type", "application/x-www-form-urlencoded")
+                        .header("x-rapidapi-host", "robomatic-ai.p.rapidapi.com")
+                        .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
+                        .body(String.format("in=%s&op=in&cbot=1&SessionID=%s&ChatSource=RapidAPI&cbid=1&key=RHMN5hnQ4wTYZBGCF3dfxzypt68rVP", msg2Bot,sessionId))
+                        .asString();
+                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("out").toString();
+                message = message.substring(1,message.length()-1);
+                message  = StringEscapeUtils.unescapeJava(message);
+                return ResultVo.success(message);
+            } catch (UnirestException e) {
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            } catch(UnsupportedEncodingException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Error converting input message to URLencoding.");
+            }
+        } else if(Chatbots.AICHATBOT.getName().equals(chatbot)){
+            try {
+                String msg2Bot = URLEncoder.encode(input, StandardCharsets.UTF_8.toString());
+                System.out.println(msg2Bot);
+                HttpResponse<String> response = Unirest.get(String.format("https://ai-chatbot.p.rapidapi.com/chat/free?message=%s&uid=%s", msg2Bot, sessionId))
+                        .header("x-rapidapi-host", "ai-chatbot.p.rapidapi.com")
+                        .header("x-rapidapi-key", "5eb63d3000msh467869941c1ed92p1a1562jsnbe8a3a656328")
+                        .asString();
+                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().getAsJsonObject("chatbot").get("response").toString();
+                message = message.substring(1,message.length()-1);
+                message = StringEscapeUtils.unescapeJava(message);
+                return ResultVo.success(message);
+            } catch (UnirestException e) {
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
+            } catch(JSONException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed.");
+            } catch (NullPointerException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Parsing JSON failed. NULL pointer");
+            } catch(UnsupportedEncodingException e){
+                e.printStackTrace();
+                return ResultVo.error(BusinessError.INTERNAL_ERROR, "Error converting input message to URLencoding.");
             }
         }
-        log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
+        log.warn("DialogueServiceImpl->getResponse: no such chatbot found: " + chatbot);
         return ResultVo.error(BusinessError.INVALID_PARAM);
     }
 

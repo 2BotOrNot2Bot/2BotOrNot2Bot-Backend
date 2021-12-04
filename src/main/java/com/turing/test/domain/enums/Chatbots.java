@@ -10,8 +10,11 @@ import lombok.AllArgsConstructor;
 public enum Chatbots {
 
     DIALOGFLOW("dialogflow"),
+//    PANDORA_BOTS("pandorabots"),
+//    HARLEY("harley"),
     BRAINSHOP("brainshop"),
-    RASA("rasa");
+    AICHATBOT("aichatbot"),
+    ROBOMATIC("robomatic");
 
     private final String name;
 
@@ -20,7 +23,7 @@ public enum Chatbots {
     }
 
     public static String getRandomName() {
-        return values()[(int)(Math.random() * Chatbots.values().length)].name;
+        return values()[(int)(Math.random() * Chatbots.values().length)].getName();
     }
 
 }

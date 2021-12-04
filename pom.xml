@@ -64,13 +64,6 @@
         <artifactId>spring-boot-starter-cache</artifactId>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache -->
-    <dependency>
-        <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache</artifactId>
-    </dependency>
-
-
     <!--firebase-->
     <dependency>
         <groupId>com.google.firebase</groupId>
@@ -108,6 +101,18 @@
         <groupId>com.mashape.unirest</groupId>
         <artifactId>unirest-java</artifactId>
         <version>1.4.9</version>
+    </dependency>
+    <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp-ws</artifactId>
+        <version>3.4.2</version>
+    </dependency>
+
+    <!-- org apache lang -->
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.12.0</version>
     </dependency>
 
 </dependencies>

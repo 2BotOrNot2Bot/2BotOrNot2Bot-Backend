@@ -6,6 +6,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.turing.test.domain.Chatbot;
+import com.turing.test.domain.enums.Chatbots;
 import com.turing.test.service.ChatbotService;
 import com.turing.test.service.DialogueService;
 import com.turing.test.service.UserService;
@@ -102,8 +103,24 @@ class BackendEntryTest {
         log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
     }
 
+//    @Test
+//    void haha () {
+//        try {
+//            HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg=Hello!")
+//                    .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
+//                    .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
+//                    .asString();
+//            String message = JsonParser.parseString(response.getBody()).getAsJsonObject().toString();
+//            message = message.substring(2,message.length()-2);
+//            message = message.replace("\"", "'");
+//            log.info(message);
+//        } catch (UnirestException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-
-
-
+    @Test
+    void resetChatbots() throws ExecutionException, InterruptedException {
+        Assertions.assertEquals(Chatbots.values().length,chatbotService.resetChatbots().getData());
+    }
 }

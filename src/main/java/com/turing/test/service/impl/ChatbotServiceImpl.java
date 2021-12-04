@@ -4,6 +4,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.turing.test.domain.Chatbot;
+import com.turing.test.domain.enums.Chatbots;
 import com.turing.test.service.ChatbotService;
 import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
@@ -11,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -103,6 +106,23 @@ public class ChatbotServiceImpl implements ChatbotService {
         // future.get() blocks on batch commit operation
         log.info("ChatbotServiceImpl->clearChatbotStat: stat of {} is cleared", name);
         return ResultVo.success(future.get().get(0).getUpdateTime().toString());
+    }
+
+    @Override
+    public ResultVo<Integer> resetChatbots() throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        int count = 0;
+        for(Chatbots chatbot : Chatbots.values()){
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("name", chatbot.getName());
+            docData.put("testCount", 0);
+            docData.put("successCount", 0);
+            docData.put("percentage", 0);
+            ApiFuture<WriteResult> future = dbFirestore.collection(COL_NAME).document(chatbot.getName()).set(docData);
+            future.get();
+            count++;
+        }
+        return ResultVo.success(count);
     }
 
 }

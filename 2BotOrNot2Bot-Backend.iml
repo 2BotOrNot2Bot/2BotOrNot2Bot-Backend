@@ -6,6 +6,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/${project.build.directory}/classes" />
       <excludeFolder url="file://$MODULE_DIR$/${project.build.directory}/test-classes" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
@@ -85,8 +86,6 @@
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.5.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.9" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache:2.10.9.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" name="Maven: com.google.firebase:firebase-admin:8.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.32.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.31.5" level="project" />
@@ -110,6 +109,7 @@
     <orderEntry type="library" name="Maven: com.google.cloud:proto-google-cloud-firestore-bundle-v1:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: io.opencensus:opencensus-contrib-grpc-util:0.28.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:30.1.1-android" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.67.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.67.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.67.Final" level="project" />
@@ -167,5 +167,9 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.13" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20160212" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp-ws:3.4.2" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.17.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
   </component>
 </module>
