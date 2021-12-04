@@ -110,7 +110,9 @@ class BackendEntryTest {
                     .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
                     .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
                     .asString();
-            log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
+            String message = JsonParser.parseString(response.getBody()).getAsJsonObject().toString();
+            message = message.substring(2,message.length()-2);
+            log.info(message);
         } catch (UnirestException e) {
             e.printStackTrace();
         }

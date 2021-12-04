@@ -140,7 +140,8 @@ public class DialogueServiceImpl implements DialogueService {
                 log.info("DialogueServiceImpl->getResponse: IOException");
                 e.printStackTrace();
             }
-        } else if(Chatbots.HARLEY.getName().equals(chatbot)){
+        }
+        else if(Chatbots.HARLEY.getName().equals(chatbot)){
             try{
                 HttpResponse<String> response = Unirest.post("https://harley-the-chatbot.p.rapidapi.com/talk/bot")
                         .header("content-type", "application/json")
@@ -166,20 +167,25 @@ public class DialogueServiceImpl implements DialogueService {
             }
 
             // Haven't implemented yet
-        } else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
+        }
+        else if (Chatbots.BRAINSHOP.getName().equals(chatbot)){
             try {
-                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input)
+                String input_string = input.replace(" ","%20");
+                HttpResponse<String> response = Unirest.get("https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=178&key=sX5A2PcYZbsN5EY6&uid=mashape&msg="+input_string)
                         .header("x-rapidapi-host", "acobot-brainshop-ai-v1.p.rapidapi.com")
                         .header("x-rapidapi-key", "9d4fe34aadmsha68f858be4546dfp1c1075jsn843af4fa523e")
                         .asString();
-                log.info(JsonParser.parseString(response.getBody()).getAsJsonObject().toString());
-                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
+                String message = JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString();
+                message = message.substring(1,message.length()-1);
+                log.info("message: ", message);
+                return ResultVo.success(message);
+//                return ResultVo.success(JsonParser.parseString(response.getBody()).getAsJsonObject().get("cnt").toString());
             } catch (UnirestException e) {
                 e.printStackTrace();
                 return ResultVo.error(BusinessError.INVALID_PARAM, "Not necessarily invalid param, could be API failure as well");
             }
         }
-        log.warn("DialogueServiceImpl->getResponse: no such chatbot found");
+        log.warn("DialogueServiceImpl->getResponse: no such chatbot found: " + chatbot);
         return ResultVo.error(BusinessError.INVALID_PARAM);
     }
 
