@@ -15,7 +15,7 @@ RUN mvn package -DskipTests
 FROM openjdk:8-jre-alpine
 
 # Copy the jar to the production image from the builder stage.
-COPY --from=builder /app/target/helloworld-*.jar /helloworld.jar
+COPY --from=builder /app/target/2BotOrNot2Bot-Backend*.jar /2BotOrNot2Bot-Backend.jar
 
 # Run the web service on container startup.
-CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/helloworld.jar"]
+CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/2BotOrNot2Bot-Backend.jar"]
