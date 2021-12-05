@@ -25,6 +25,12 @@ class UserTest {
     UserService userService;
 
     @Test
+    void findUser() throws ExecutionException, InterruptedException {
+        ResultVo<Integer> user = userService.findUser("bJ1vXhCSr5aFnzJeonB2eGResqv1");
+        Assertions.assertEquals("success",user.getMsg());
+    }
+
+    @Test
     void updateUser() throws InterruptedException, ExecutionException {
         String uid = "testUser";
         ResultVo<String> result = userService.addUser(uid);
@@ -35,5 +41,6 @@ class UserTest {
         Assertions.assertEquals(55, result2.getData());
         ResultVo<String> result3 = userService.deleteUser(uid); // Avoid polluting the database
     }
+
 
 }

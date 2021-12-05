@@ -21,6 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.*;
 
 /**
@@ -40,12 +42,6 @@ class BackendEntryTest {
 
     @Autowired
     DialogueService dialogueService;
-
-    @Test
-    void findUser() throws ExecutionException, InterruptedException {
-        ResultVo<Integer> user = userService.findUser("bJ1vXhCSr5aFnzJeonB2eGResqv1");
-        Assertions.assertEquals("success",user.getMsg());
-    }
 
     @Test
     void checkUpdateChatbotPercentage() throws ExecutionException, InterruptedException {
@@ -95,13 +91,26 @@ class BackendEntryTest {
                     chatbot.getName(),String.format("%.2f", chatbot.getPercentage()*100));
         }
     }
-    
+
+    @Test
+    void testClearChatBotStat(){
+        try{
+            ResultVo<String> result = chatbotService.clearChatbotStat("testbot");
+            Assertions.assertEquals("success",result.getMsg());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     void checkGetResponseFromDialogflow() throws IOException {
+
         ResultVo<String> response = dialogueService.getResponse("Hello","dialogflow", "123edf");
         Assertions.assertEquals("success",response.getMsg());
         log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
     }
+
+
 
 //    @Test
 //    void haha () {
@@ -123,4 +132,21 @@ class BackendEntryTest {
     void resetChatbots() throws ExecutionException, InterruptedException {
         Assertions.assertEquals(Chatbots.values().length,chatbotService.resetChatbots().getData());
     }
+
+    @Test
+    void checkRandomPick(){
+        TreeMap<String, Integer> stats = new TreeMap<String, Integer>();
+        for (Chatbots chatbot: Chatbots.values()){
+            stats.put(chatbot.getName(), 0);
+        }
+        for (int i = 0; i < 10000; i++) {
+            String name = Chatbots.getRandomName();
+            stats.put(name, stats.get(name) + 1);
+        }
+        for (Map.Entry<String, Integer> e: stats.entrySet()) {
+            Assertions.assertTrue(e.getValue() >= 1000);
+        }
+    }
+
+
 }

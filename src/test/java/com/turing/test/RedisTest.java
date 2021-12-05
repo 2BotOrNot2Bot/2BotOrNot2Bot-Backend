@@ -49,13 +49,6 @@ class RedisTest {
         dialogueService.endDialogue("123456");
         dialogueService.endDialogue("888888");
     }
-    
-    @Test
-    void checkGetResponseFromDialogflow() throws IOException {
-        ResultVo<String> response = dialogueService.getResponse("Hello","dialogflow", "123edf");
-        Assertions.assertEquals("success",response.getMsg());
-        log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
-    }
 
     @Test
     void checkClearCache() throws IOException {
