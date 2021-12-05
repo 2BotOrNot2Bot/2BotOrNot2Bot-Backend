@@ -45,66 +45,73 @@ class BackendEntryTest {
 
     @Test
     void checkUpdateChatbotPercentage() throws ExecutionException, InterruptedException {
-        try {
-            chatbotService.clearChatbotStat("aichatbot");
+        for (Chatbots bot: Chatbots.values()){
+            String chatbotName = bot.getName();
+            try {
+                chatbotService.clearChatbotStat(chatbotName);
 
-//            CompletableFuture<ResultVo<Double>> result0 = chatbotService.updateChatbotStat("aichatbot",true).;
-//            CompletableFuture<ResultVo<Double>> result1 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result2 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result3 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result4 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result5 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result6 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result7 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result8 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result9 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result10 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result11 = chatbotService.updateChatbotStat("aichatbot",true);
-//            CompletableFuture<ResultVo<Double>> result12 = chatbotService.updateChatbotStat("aichatbot",false);
-//            CompletableFuture<ResultVo<Double>> result13 = chatbotService.updateChatbotStat("aichatbot",false);
+//            CompletableFuture<ResultVo<Double>> result0 = chatbotService.updateChatbotStat(chatbotName,true).;
+//            CompletableFuture<ResultVo<Double>> result1 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result2 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result3 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result4 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result5 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result6 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result7 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result8 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result9 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result10 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result11 = chatbotService.updateChatbotStat(chatbotName,true);
+//            CompletableFuture<ResultVo<Double>> result12 = chatbotService.updateChatbotStat(chatbotName,false);
+//            CompletableFuture<ResultVo<Double>> result13 = chatbotService.updateChatbotStat(chatbotName,false);
 //
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",true).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-            chatbotService.updateChatbotStat("aichatbot",false).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,true).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+                chatbotService.updateChatbotStat(chatbotName,false).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Test
     void checkGetSortedChatbotStat() throws ExecutionException, InterruptedException {
-        ResultVo<List<Chatbot>> chatbots= chatbotService.getSortedChatbotStat();
-        Assertions.assertEquals("success",chatbots.getMsg());
-        for(Chatbot chatbot : chatbots.getData()){
-            log.info("BackendEntryTest->checkGetSortedChatbotStat: {} has achieved {}%",
-                    chatbot.getName(),String.format("%.2f", chatbot.getPercentage()*100));
+        for (int i = 0; i < 100; i++) {
+            ResultVo<List<Chatbot>> chatbots= chatbotService.getSortedChatbotStat();
+            Assertions.assertEquals("success",chatbots.getMsg());
+            for(Chatbot chatbot : chatbots.getData()){
+                log.info("BackendEntryTest->checkGetSortedChatbotStat: {} has achieved {}%",
+                        chatbot.getName(),String.format("%.2f", chatbot.getPercentage()*100));
+            }
         }
     }
 
     @Test
     void testClearChatBotStat(){
-        try{
-            ResultVo<String> result = chatbotService.clearChatbotStat("testbot");
-            Assertions.assertEquals("success",result.getMsg());
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+        for (Chatbots bot: Chatbots.values()){
+            String chatbotName = bot.getName();
+            try{
+                ResultVo<String> result = chatbotService.clearChatbotStat(chatbotName);
+                Assertions.assertEquals("success",result.getMsg());
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Test
     void checkGetResponseFromDialogflow() throws IOException {
-
         ResultVo<String> response = dialogueService.getResponse("Hello","dialogflow", "123edf");
         Assertions.assertEquals("success",response.getMsg());
         log.info("BackendEntryTest->checkGetResponseFromDialogflow: {}",response);
@@ -147,6 +154,7 @@ class BackendEntryTest {
             Assertions.assertTrue(e.getValue() >= 1000);
         }
     }
+
 
 
 }

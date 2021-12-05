@@ -62,4 +62,6 @@ class RedisTest {
         Assertions.assertEquals(0,redisTemplate.getConnectionFactory().getConnection().keys("*".getBytes()).size());
     }
 
+
+
 }
