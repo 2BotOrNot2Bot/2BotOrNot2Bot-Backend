@@ -28,7 +28,7 @@ public class WebSocket {
 
     private Session session;
 
-    private static Map<String,WebSocket> webSocketMap = new ConcurrentHashMap<>();
+    private static final Map<String,WebSocket> webSocketMap = new ConcurrentHashMap<>();
 
     @Autowired
     DialogueService dialogueService;
