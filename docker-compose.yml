@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  backend-main:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_DATABASE=0
+      - REDIS_HOST=redis
+      - REDIS_HOSTNAME=redis
+      - REDIS_TIMEOUT=2000
+      - REDIS_PASSWORD=
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
