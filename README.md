@@ -219,8 +219,8 @@ Example response body:
 }
 ```
 
-## Deployment (TBD)
-Hosting on Heroku/Firebase
+## Deployment 
+Hosting with AWS and Docker
 
 ## Credit
 **Yibo Wen** /

@@ -20,7 +20,7 @@ public class RedisLock {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private long timeout = 200L;
+    private final long timeout = 200L;
 
     public Boolean tryLock(String lockKey, String clientId){
         if(Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent("LOCK_"+lockKey, clientId, Duration.ofMillis(timeout)))){
