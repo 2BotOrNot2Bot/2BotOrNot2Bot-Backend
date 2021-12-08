@@ -7,6 +7,7 @@ import com.turing.test.vo.BusinessError;
 import com.turing.test.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,9 @@ public class DialogueController {
 
     @Autowired
     RedisUtils redisUtils;
+
+    @Autowired
+    private Environment env;
 
     @PostMapping("/dialogues/search")
     public ResultVo<String> startSearch(@RequestBody UserIdForm form) {
@@ -54,6 +58,11 @@ public class DialogueController {
     }
 
     @DeleteMapping("/cache")
-    public ResultVo<Boolean> clearCache() { return ResultVo.success(redisUtils.clearAll()); }
+    public ResultVo<Boolean> clearCache(@RequestHeader("Authorization") String auth) {
+        if(auth.contains(env.getProperty("AUTH_CODE"))){
+            return ResultVo.success(redisUtils.clearAll());
+        }
+        return ResultVo.error(BusinessError.ACCESS_NOT_GRANTED);
+    }
 
 }
