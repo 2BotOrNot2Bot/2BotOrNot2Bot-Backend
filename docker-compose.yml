@@ -12,6 +12,7 @@ services:
       - REDIS_TIMEOUT=2000
       - REDIS_PASSWORD=
       - DIALOGFLOW_PROJECT_ID=storybot-uerv
+      - AUTH_CODE=what-the-fuck
   redis:
     image: "redis"
     ports:
